@@ -1,0 +1,40 @@
+@import 'primeflex/primeflex.css';
+
+
+
+.title-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+    grid-auto-rows: minmax(0px, auto);
+    margin-bottom: 10px
+}
+
+.card {
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.container-header-file {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 15fr;
+    grid-gap: 5px;
+
+  }
+  .container-header-file > :nth-child(4) {
+    grid-column: 4;
+    width: 100%;
+    margin-top: 3%;
+    
+  }
+
+.titulo-upload{
+    display: grid;
+    grid-template-rows: 0.05fr 2fr;
+    grid-gap: 5px;
+
+}
+
+  

@@ -1,0 +1,75 @@
+<div class="card">
+  <div class="text-center">
+    <span>Información Persona</span>
+  </div>
+
+  @if(entity){ @switch(entityType){ @case ("Usuario"){
+  <div style="padding: 0.5rem">
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+    </div>
+  </div>
+  } @case ("Buseta"){
+  <div style="padding: 0.5rem">
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+    </div>
+  </div>
+  } } }
+
+  <!-- @switch ("UsuarioModel") { @case ("UsuarioModel") {
+  <div style="padding: 0.5rem">
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Nombres:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        {{ entity.userName }}
+      </span>
+    </div>
+  </div>
+  } @default {
+  <div style="padding: 0.5rem">
+    <span>No info</span>
+  </div>
+  } } -->
+
+  <!--<div style="padding: 0.5rem">
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Nombres:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        Juan Carlos
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Apellidos:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        Perez Lema
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Dirección:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        Avenida de las americas y Juan montalvo
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Teléfono:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        09865347656
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Cédula:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        0105377466
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Correo:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word">
+        perdroalvarezgmailcom
+      </span>
+    </div>
+  </div>-->
+</div>

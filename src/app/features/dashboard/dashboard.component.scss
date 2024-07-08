@@ -1,0 +1,31 @@
+/* Importa los estilos de PrimeFlex después */
+@import 'primeflex/primeflex.css';
+
+.p-overlaypanel {
+    width: 200px;
+  }
+  
+  .p-overlaypanel .p-3 {
+    padding: 1rem;
+  }
+  
+  .p-overlaypanel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .p-overlaypanel ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .p-overlaypanel ul li a {
+    text-decoration: none;
+    color: #007ad9;
+    cursor: pointer;
+  }
+  
+  .p-overlaypanel ul li a:hover {
+    text-decoration: underline;
+  }
+  

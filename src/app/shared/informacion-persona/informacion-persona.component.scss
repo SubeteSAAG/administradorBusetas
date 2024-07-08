@@ -1,0 +1,11 @@
+@import 'primeflex/primeflex.css';
+
+
+.card {
+    width: 100%;
+    min-height: 50%;
+    background-color: rgb(242, 242, 242);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border: 2px solid rgb(223, 221, 221)    
+}

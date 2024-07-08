@@ -1,0 +1,11 @@
+@if(visible){
+<div class="message-overlay">
+  <div class="message-box">
+    <button class="close-button" (click)="closeMessage()">&#x2715;</button>
+    <i [class]="icon" [style.color]="colorIcon"></i>
+    <h2 [style.color]="colorTitle">{{ title }}</h2>
+    <p>{{ description }}</p>
+    <button (click)="closeMessage()">Cerrar</button>
+  </div>
+</div>
+}
