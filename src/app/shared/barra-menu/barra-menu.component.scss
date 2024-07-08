@@ -1,0 +1,16 @@
+@import 'primeflex/primeflex.css';
+
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.barra-manu{
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(0px, auto);
+
+    
+}

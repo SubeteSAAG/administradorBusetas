@@ -1,0 +1,119 @@
+<div
+  class="w-screen h-screen bg-white sm:bg-gray-50 relative flex justify-center items-start"
+>
+  <div class="absolute inset-0 hidden sm:block">
+    <img
+      class="absolute w-60 lg:w-96 left-0 bottom-0"
+      src="assets/svg/login-bg-left.svg"
+      alt=""
+    />
+    <img
+      class="absolute w-60 lg:w-96 right-0 bottom-0"
+      src="assets/svg/login-bg-rigth.svg"
+      alt=""
+    />
+  </div>
+  <div class="relative w-full sm:w-7/12 md:w-6/12 lg:w-4/12 mx-auto">
+    <header class="pt-6 pb-2 flex justify-center">
+      <img
+        class="max-w-xs md:max-w-sm lg:max-w-md"
+        src="assets/images/logo/logo-gradient-blue-trello.png"
+        alt="logo"
+      />
+    </header>
+    <div class="bg-white rounded shadow py-4 px-6">
+      <div class="mb-4">
+        <h1 class="text-center font-semibold pt-4 pb-8">Login</h1>
+        <form
+          [formGroup]="form"
+          novalidate
+          class="space-y-4"
+          (ngSubmit)="doLogin()"
+        >
+          <div class="relative">
+            <input
+              #nameInput
+              formControlName="username"
+              placeholder="Enter Username"
+              type="text"
+              class="w-full rounded bg-gray-100 border-gray-300 border-2"
+            />
+            <button
+              type="button"
+              class="p-2 absolute right-2"
+              (click)="nameInput.focus()"
+            ></button>
+          </div>
+
+          @if(form.controls.username.touched && form.controls.username.invalid){
+          @if(form.controls.username.hasError('required')){
+          <p class="font-medium text-red-500 text-xs mt-1 ml-1">
+            Campo requerido
+          </p>
+          } @if(form.controls.username.hasError('username')){
+          <p class="font-medium text-red-500 text-xs mt-1 ml-1">
+            This field should be a username
+          </p>
+          } }
+
+          <div class="relative">
+            <input
+              formControlName="password"
+              placeholder="Enter password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="w-full rounded bg-gray-100 border-gray-300 border-2"
+            />
+            <button
+              type="button"
+              class="p-2 absolute right-2"
+              (click)="showPassword = !showPassword"
+            ></button>
+          </div>
+
+          @if(form.controls.password.touched && form.controls.password.invalid){
+          @if(form.controls.password.hasError('required')){
+          <p class="font-medium text-red-500 text-xs mt-1 ml-1">
+            Campo requerido
+          </p>
+
+          } @if(form.controls.password.hasError('minlength')){
+          <p class="font-medium text-red-500 text-xs mt-1 ml-1">
+            This field should be greater than 6 characters
+          </p>
+
+          } }
+
+          <div>
+            <app-button
+              typeBtn="submit"
+              color="success"
+              [loading]="status === 'loading'"
+              >Login</app-button
+            >
+          </div>
+        </form>
+      </div>
+      <hr class="my-4 border-b-1 border-r-gray-300" />
+      <div
+        class="flex justify-center items-center space-x-0 space-y-2 md:space-x-2 md:space-y-0"
+      >
+        <a routerLink="/password" class="text-blue-600 font-light">
+          Recuperar Contraseña
+        </a>
+        <span class="text-gray-500 hidden md:block">.</span>
+        <a routerLink="/register" class="text-blue-600 font-light">
+          Registrarse
+        </a>
+      </div>
+      <hr class="mt-10 border-b-1 border-r-gray-300" />
+      <div class="flex justify-center">
+        <img
+          class="w-32 mt-4"
+          loading="lazy"
+          src="/assets/images/logo/logo-atlassian-gray.png"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+</div>

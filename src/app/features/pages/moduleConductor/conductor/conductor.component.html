@@ -1,0 +1,97 @@
+<!-- conductor.component.html -->
+<div style="font-size: 1rem; font-weight: 700; margin-bottom: 10px">
+  <p>{{ titulo }}</p>
+</div>
+
+<div class="container">
+  <form
+    [formGroup]="conductorForm"
+    class="form-container"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="mb-3">
+      <label for="cedula" class="form-label">Cédula</label>
+      <input
+        id="cedula"
+        type="text"
+        class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Cedula"
+        formControlName="cedula"
+      />
+      @if(conductorForm.get('cedula')?.hasError('required') &&
+      conductorForm.get('cedula')?.touched){
+      <div class="form-error" style="color: red">Cédula requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Nombres"
+        formControlName="nombre"
+      />
+      @if(conductorForm.get('nombre')?.hasError('required') &&
+      conductorForm.get('nombre')?.touched){
+      <div class="form-error" style="color: red">Nombre requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="apellido" class="form-label">Apellido</label>
+      <input
+        id="apellido"
+        type="text"
+        class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Apellidos"
+        formControlName="apellido"
+      />
+      @if(conductorForm.get('apellido')?.hasError('required') &&
+      conductorForm.get('apellido')?.touched){
+      <div class="form-error" style="color: red">Apellido requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="telefono" class="form-label">Telefono</label>
+      <input
+        id="telefono"
+        type="number"
+        class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Telefono"
+        formControlName="telefono"
+      />
+      @if(conductorForm.get('telefono')?.hasError('required') &&
+      conductorForm.get('telefono')?.touched){
+      <div class="form-error" style="color: red">Telefono requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="direccion" class="form-label">Dirección</label>
+      <input
+        id="direccion"
+        type="text"
+        class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Dirección"
+        formControlName="direccion"
+      />
+      @if(conductorForm.get('direccion')?.hasError('required') &&
+      conductorForm.get('direccion')?.touched){
+      <div class="form-error" style="color: red">Dirección requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        id="email"
+        type="email"
+        class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Email"
+        formControlName="email"
+      />
+      @if(conductorForm.get('email')?.hasError('required') &&
+      conductorForm.get('email')?.touched){
+      <div class="form-error" style="color: red">Email requerido</div>
+      }
+    </div>
+  </form>
+</div>

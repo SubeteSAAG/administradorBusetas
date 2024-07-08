@@ -1,0 +1,14 @@
+<p-menubar [model]="items" class="align-right">
+  <ng-template pTemplate="item" let-item let-root="root" class="border-circle">
+    <a
+      pRipple
+      class="p-menuitem-link bg-gray-200 border-blue-500"
+      (click)="accionItem(item)"
+    >
+      <span [class]="item.icon"></span>
+      <span class="ml-2">{{ item.label }}</span>
+    </a>
+  </ng-template>
+</p-menubar>
+
+<app-modal-busqueda></app-modal-busqueda>

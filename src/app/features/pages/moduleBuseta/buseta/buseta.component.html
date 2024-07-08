@@ -1,0 +1,144 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<div style="font-size: 1rem; font-weight: 700; margin-bottom: 10px">
+  <p>{{ titulo }}</p>
+</div>
+
+<div class="container">
+  <form [formGroup]="busetaForm" class="form-container" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        class="custom-input"
+        placeholder="Nombre"
+        formControlName="nombre"
+      />
+      @if(busetaForm.get('nombre')?.hasError('required') &&
+      busetaForm.get('nombre')?.touched){
+      <div class="form-error" style="color: red">Nombre requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripcion</label>
+      <input
+        id="descripcion"
+        type="text"
+        class="custom-input"
+        placeholder="Descripcion"
+        formControlName="descripcion"
+      />
+      @if(busetaForm.get('descripcion')?.hasError('required') &&
+      busetaForm.get('descripcion')?.touched){
+      <div class="form-error" style="color: red">Descripcion requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="capacidad" class="form-label">Capacidad</label>
+      <input
+        id="capacidad"
+        type="number"
+        class="custom-input"
+        placeholder="Capacidad"
+        formControlName="capacidad"
+      />
+      @if(busetaForm.get('capacidad')?.hasError('required') &&
+      busetaForm.get('capacidad')?.touched){
+      <div class="form-error" style="color: red">Capacidad requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="propietario" class="form-label">Propietario</label>
+      <input
+        id="propietario"
+        type="text"
+        class="custom-input"
+        placeholder="Propietario"
+        formControlName="propietario"
+      />
+      @if(busetaForm.get('propietario')?.hasError('required') &&
+      busetaForm.get('propietario')?.touched){
+      <div class="form-error" style="color: red">Propietario requerido</div>
+      }
+    </div>
+  </form>
+</div>
+
+<!-- LISTADO CONDUCTORES -->
+
+<h5 style="margin-top: 1rem">LISTADO DE CONDUCTORES</h5>
+@if(ltsUserConducotres()){
+<div class="card">
+  <p-table
+    #dt1
+    [value]="ltsUserConducotres().data"
+    [tableStyle]="{ 'min-width': '40rem' }"
+    responsiveLayout="stack"
+    [paginator]="true"
+    [rows]="5"
+    [globalFilterFields]="[
+      'informacionPersonal.identificacion',
+      'informacionPersonal.nombres',
+      'informacionPersonal.apellidos'
+    ]"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <button
+          pButton
+          class="p-button-outlined"
+          icon="pi pi-refresh"
+          (click)="recargar()"
+        ></button>
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="BUSCAR CONDUCTOR"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 25%">Cédula</th>
+        <th style="width: 25%">Nombres</th>
+        <th style="width: 25%">Apellidos</th>
+        <th style="width: 20%">Seleccionar</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-conductor>
+      <tr>
+        <td>{{ conductor.informacionPersonal.identificacion }}</td>
+        <td>{{ conductor.informacionPersonal.nombres }}</td>
+        <td>{{ conductor.informacionPersonal.apellidos }}</td>
+        <td>
+          <p-checkbox
+            [binary]="true"
+            inputId="binary"
+            [(ngModel)]="conductor.selected"
+            (click)="getCondcutor(conductor)"
+          ></p-checkbox>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+}

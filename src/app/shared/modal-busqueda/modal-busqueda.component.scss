@@ -1,0 +1,4 @@
+@import 'primeflex/primeflex.css';
+:host ::ng-deep .ui-dialog {
+    z-index: 1100; /* Ajusta este valor según sea necesario */
+  }

@@ -1,0 +1,439 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<div class="title-container">
+  <p style="font-size: 1rem; font-weight: 700">{{ titulo }}</p>
+  <div
+    class="flex flex-wrap gap-3"
+    style="
+      background-color: rgb(239, 239, 239);
+      padding: 5px;
+      border-radius: 5px;
+    "
+  >
+    <div class="flex align-items-center">
+      <p-radioButton
+        name="conductor"
+        value="1"
+        (click)="cambioEstado()"
+        [(ngModel)]="selectUser"
+        inputId="conductor"
+      />
+      <label for="conductor" class="ml-2"> Conductor </label>
+    </div>
+
+    <div class="flex align-items-center">
+      <p-radioButton
+        name="representante"
+        value="0"
+        (click)="cambioEstado()"
+        [(ngModel)]="selectUser"
+        inputId="representante"
+      />
+      <label for="representante" class="ml-2"> Representante </label>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <form
+    [formGroup]="usuarioForm"
+    class="form-container"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="p-col-12">
+      <label for="name" class="form-label">Nombre</label>
+      <input
+        id="name"
+        type="text"
+        class="custom-input"
+        placeholder="Nombre"
+        formControlName="name"
+      />
+      @if(usuarioForm.get('name')?.hasError('required') &&
+      usuarioForm.get('name')?.touched){
+      <div class="form-error" style="color: red">Nombre requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="userName" class="form-label">Nombre Usuario</label>
+      <input
+        id="userName"
+        type="text"
+        class="custom-input"
+        placeholder="Nombre de Usuario"
+        formControlName="userName"
+      />
+      @if(usuarioForm.get('userName')?.hasError('required') &&
+      usuarioForm.get('userName')?.touched){
+      <div class="form-error" style="color: red">Nombre Usuario requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="email" class="form-label">Email</label>
+      <input
+        id="email"
+        type="email"
+        class="custom-input"
+        placeholder="Email"
+        formControlName="email"
+      />
+      @if(usuarioForm.get('email')?.hasError('required') &&
+      usuarioForm.get('email')?.touched){
+      <div class="form-error" style="color: red">Email requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="password" class="form-label">Contraseña</label>
+      <input
+        id="password"
+        type="password"
+        class="custom-input"
+        placeholder="Contraseña"
+        formControlName="password"
+      />
+      @if(usuarioForm.get('password')?.hasError('required') &&
+      usuarioForm.get('password')?.touched){
+      <div class="form-error" style="color: red">Contraseña requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="nombres" class="form-label">Nombres</label>
+      <input
+        id="nombres"
+        type="text"
+        class="custom-input"
+        placeholder="Nombres"
+        formControlName="nombres"
+      />
+      @if(usuarioForm.get('nombres')?.hasError('required') &&
+      usuarioForm.get('nombres')?.touched){
+      <div class="form-error" style="color: red">Nombres Requeridos</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="apellidos" class="form-label">Apellidos</label>
+      <input
+        id="apellidos"
+        type="text"
+        class="custom-input"
+        placeholder="Apellidos"
+        formControlName="apellidos"
+      />
+      @if(usuarioForm.get('apellidos')?.hasError('required') &&
+      usuarioForm.get('apellidos')?.touched){
+      <div class="form-error" style="color: red">Apellidos Requeridos</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="sobreNombre" class="form-label">Sobre Nombre</label>
+      <input
+        id="sobreNombre"
+        type="text"
+        class="custom-input"
+        placeholder="Sobre Nombre"
+        formControlName="sobreNombre"
+      />
+      @if(usuarioForm.get('sobreNombre')?.hasError('required') &&
+      usuarioForm.get('sobreNombre')?.touched){
+      <div class="form-error" style="color: red">Sobre nombre Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="tipoIdentificacion" class="form-label"
+        >Tipo Identificación</label
+      >
+      <select
+        id="tipoIdentificacion"
+        class="custom-input"
+        formControlName="tipoIdentificacion"
+      >
+        <option value="" disabled selected>
+          Seleccione Tipo Identificación
+        </option>
+        @for(option of ltsTipoIdentificacion; track
+        option.idTipoIdentificacion){
+        <option [value]="option.idTipoIdentificacion">
+          {{ option.nombre }}
+        </option>
+        }
+      </select>
+      @if(usuarioForm.get('tipoIdentificacion')?.hasError('required') &&
+      usuarioForm.get('tipoIdentificacion')?.touched){
+      <div class="form-error" style="color: red">
+        Tipo Identificación Requerido
+      </div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="identificacion" class="form-label">Identificación</label>
+      <input
+        id="identificacion"
+        type="text"
+        class="custom-input"
+        placeholder="Identificación"
+        formControlName="identificacion"
+      />
+      @if(usuarioForm.get('identificacion')?.hasError('required') &&
+      usuarioForm.get('identificacion')?.touched){
+      <div class="form-error" style="color: red">Identificación Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="telefono" class="form-label">Telefono</label>
+      <input
+        id="telefono"
+        type="number"
+        class="custom-input"
+        placeholder="Telefono"
+        formControlName="telefono"
+      />
+      @if(usuarioForm.get('telefono')?.hasError('required') &&
+      usuarioForm.get('telefono')?.touched){
+      <div class="form-error" style="color: red">Telefono Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="celular" class="form-label">Célular</label>
+      <input
+        id="celular"
+        type="number"
+        class="custom-input"
+        placeholder="Célular"
+        formControlName="celular"
+      />
+      @if(usuarioForm.get('celular')?.hasError('required') &&
+      usuarioForm.get('celular')?.touched){
+      <div class="form-error" style="color: red">Célular Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
+      <input
+        id="fechaNacimiento"
+        type="date"
+        class="custom-input"
+        placeholder="Fecha Nacimeinto"
+        formControlName="fechaNacimiento"
+      />
+      @if(usuarioForm.get('fechaNacimiento')?.hasError('required') &&
+      usuarioForm.get('fechaNacimiento')?.touched){
+      <div class="form-error" style="color: red">
+        Fecha Nacimiento Requerido
+      </div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="direccion" class="form-label">Dirección</label>
+      <input
+        id="direccion"
+        type="text"
+        class="custom-input"
+        placeholder="Dirección"
+        formControlName="direccion"
+      />
+      @if(usuarioForm.get('direccion')?.hasError('required') &&
+      usuarioForm.get('direccion')?.touched){
+      <div class="form-error" style="color: red">Dirección Requerida</div>
+      }
+    </div>
+  </form>
+
+  @if(selectUser == 1){
+
+  <p-divider type="solid" />
+
+  <div style="padding-bottom: 10px">
+    <p-dropdown
+      [options]="ltsTpoDocumento"
+      [(ngModel)]="selectDocumento"
+      optionLabel="nombre"
+      placeholder="Seleccione Tipo Docuemnto"
+    />
+  </div>
+
+  <div class="card">
+    <p-toast />
+    <p-fileUpload
+      name="myfile[]"
+      url=""
+      [multiple]="true"
+      accept="image/*"
+      maxFileSize="1000000"
+      (onUpload)="onTemplatedUpload()"
+      (onSelect)="onSelectedFiles($event)"
+    >
+      <ng-template
+        pTemplate="header"
+        let-files
+        let-chooseCallback="chooseCallback"
+        let-clearCallback="clearCallback"
+        let-uploadCallback="uploadCallback"
+      >
+        <div class="container-header-file">
+          <div>
+            <p-button
+              (onClick)="choose($event, chooseCallback)"
+              icon="pi pi-images"
+              [rounded]="true"
+              [outlined]="true"
+            />
+          </div>
+          <div>
+            <p-button
+              (onClick)="uploadEvent($event, uploadCallback)"
+              icon="pi pi-cloud-upload"
+              [rounded]="true"
+              [outlined]="true"
+              severity="success"
+              [disabled]="!files || files.length === 0"
+            />
+          </div>
+          <div>
+            <p-button
+              (onClick)="clear($event, clearCallback)"
+              icon="pi pi-times"
+              [rounded]="true"
+              [outlined]="true"
+              severity="danger"
+              [disabled]="!files || files.length === 0"
+            />
+          </div>
+          <div>
+            <p-progressBar
+              [value]="totalSizePercent"
+              [showValue]="false"
+              [style]="{ height: '10px' }"
+              [ngClass]="{ 'exceeded-progress-bar': totalSizePercent > 100 }"
+            >
+              <span class="white-space-nowrap">{{ totalSize }}B / 1Mb</span>
+            </p-progressBar>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template
+        pTemplate="content"
+        let-files
+        let-uploadedFiles="uploadedFiles"
+        let-removeFileCallback="removeFileCallback"
+        let-removeUploadedFileCallback="removeUploadedFileCallback"
+      >
+        @if(files?.length > 0){
+        <h5>Documentos Pendiente</h5>
+        <div class="flex flex-wrap p-0 sm:p-5 gap-5">
+          <div
+            *ngFor="let file of ltsFiles; let i = index"
+            class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+          >
+            <div>
+              <img
+                role="presentation"
+                [alt]="file.nombre"
+                [src]="file.file.objectURL"
+                width="100"
+                height="50"
+                style="object-fit: contain; width: 100px; height: 50px"
+              />
+            </div>
+            <span class="font-semibold">{{ file.nombre }}</span>
+            <div>{{ formatSize(file.size) }}</div>
+            <p-badge value="Pendiente" severity="warning" />
+            <p-badge value="{{ file.nombreDocumento }}" severity="danger" />
+            <p-button
+              icon="pi pi-times"
+              (click)="
+                onRemoveTemplatingFile(
+                  $event,
+                  file.file,
+                  removeFileCallback,
+                  index,
+                  file.id
+                )
+              "
+              [outlined]="true"
+              [rounded]="true"
+              severity="danger"
+            />
+          </div>
+        </div>
+
+        } @if(uploadedFiles?.length > 0){
+        <h5>Completado</h5>
+        <div class="flex flex-wrap p-0 sm:p-5 gap-5">
+          <div
+            *ngFor="let file of uploadedFiles; let i = index"
+            class="card m-0 px-6 flex flex-column border-1 surface-border align-items-center gap-3"
+          >
+            <div>
+              <img
+                role="presentation"
+                [alt]="file.name"
+                [src]="file.objectURL"
+                width="100"
+                height="50"
+              />
+            </div>
+            <span class="font-semibold">{{ file.name }}</span>
+            <div>{{ formatSize(file.size) }}</div>
+            <p-badge value="Completed" class="mt-3" severity="success" />
+            <p-button
+              icon="pi pi-times"
+              (onClick)="removeUploadedFileCallback(index)"
+              [outlined]="true"
+              [rounded]="true"
+              severity="danger"
+            />
+          </div>
+        </div>
+
+        }
+      </ng-template>
+      <ng-template pTemplate="file"> </ng-template>
+      <ng-template pTemplate="empty">
+        <div class="flex align-items-center justify-content-center flex-column">
+          <i
+            class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"
+          ></i>
+          <p class="mt-4 mb-0">AGREGAR FOTO DE MATRICULA Y LICENCIA</p>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+  <!--<p-carousel
+    [value]="ltsImages"
+    [numVisible]="3"
+    [numScroll]="1"
+    [responsiveOptions]="responsiveOptions"
+  >
+    <ng-template let-images pTemplate="item">
+      <div class="border-1 surface-border border-round m-2 p-3">
+        <div class="p-col-12">
+          <div class="relative mx-auto">
+            <img
+              [src]="images.url"
+              [alt]="images.nombre"
+              class="w-full border-round"
+            />
+          </div>
+        </div>
+        <div class="p-col-12 font-medium">
+          {{ images.nombre }}
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>-->
+  }
+</div>
