@@ -40,6 +40,12 @@ export const routes: Routes = [
                 loadComponent: () => import('@features/pages/moduleEstudiante/estudiante/estudiante.component')
             },
             {
+                path: 'ruta',
+                title: 'Ruta',
+                loadComponent: () => import('@features/pages/moduleRuta/ruta/ruta.component')
+            },
+
+            {
                 path: '',
                 redirectTo: '/dashboard/conductor',
                 pathMatch: 'full'

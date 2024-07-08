@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './ruta.component.html',
   styleUrl: './ruta.component.scss'
 })
-export class RutaComponent {
+export default class RutaComponent {
 
 }
