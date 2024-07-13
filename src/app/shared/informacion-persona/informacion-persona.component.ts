@@ -21,7 +21,7 @@ enum EntityType {
 })
 export class InformacionPersonaComponent implements OnInit{
 
-  entity: BusetaModel | UsuarioModel | null = null;
+  entity: any;
   entityType: EntityType = EntityType.Buseta; 
 
   private readonly serviceInfo = inject(EntityService)

@@ -11,18 +11,17 @@ import { Observable, tap } from "rxjs";
 export class BusetaService{
 
 
-    public ltsBusetas = signal<BusetaModel[]>([])
+    public ltsBusetas = signal<ApiResponse | any>(null)
     private readonly http = inject(HttpClient)
     private readonly endpoint = "/Busetas"
     private readonly apiUrl = environment.API_URL
 
     constructor(){
-        this.getLtsBusetas()
     }
 
     public getLtsBusetas(){
-        this.http.get<BusetaModel[]>(`${this.apiUrl}${this.endpoint}/listar`)
-        .pipe(tap((data: BusetaModel[]) => this.ltsBusetas.set(data)))
+        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/listar`)
+        .pipe(tap((data: ApiResponse) => this.ltsBusetas.set(data)))
         .subscribe()
 
     }

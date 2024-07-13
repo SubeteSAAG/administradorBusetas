@@ -1,6 +1,6 @@
 <div class="card">
   <div class="text-center">
-    <span>Información Persona</span>
+    <h3>INFORMACIÓN</h3>
   </div>
 
   @if(entity){ @switch(entityType){ @case ("Usuario"){
@@ -13,11 +13,24 @@
   } @case ("Buseta"){
   <div style="padding: 0.5rem">
     <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Nombre:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.name }}
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Capacidad:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.capacidad }}
+    </div>
+    <div class="flex flex-row flex-wrap">
       <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
       <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.description }}
     </div>
   </div>
-  } } }
+  } } } @else{
+  <h5 style="text-align: center">NO TIENE INFORMACIÓN SELECCIONADA</h5>
+  }
 
   <!-- @switch ("UsuarioModel") { @case ("UsuarioModel") {
   <div style="padding: 0.5rem">

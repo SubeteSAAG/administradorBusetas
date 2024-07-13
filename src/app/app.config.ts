@@ -7,9 +7,9 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 //PRIMENG
 
 import {MessageService} from 'primeng/api'
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { DialogService } from 'primeng/dynamicdialog';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { AuthInterceptor } from '@interceptors/auth-interceptor';
 import { ErrorApiInterceptor } from '@interceptors/error-api-interceptor';
 
@@ -20,10 +20,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     //provideClientHydration(),
     provideHttpClient(withFetch(), withInterceptors([ErrorApiInterceptor, AuthInterceptor])),
-    provideAnimations(),
+    provideAnimationsAsync(),
     MessageService,
     DialogService,
     DynamicDialogRef,
+    DynamicDialogConfig
 
   ]
 };

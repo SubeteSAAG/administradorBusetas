@@ -1,7 +1,7 @@
 import { Component, OnInit, effect, inject } from '@angular/core';
 import { BusetaService } from '@services/buseta-service';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BarraMenuService } from '@services/barra-menu-service';
 import { LoadingService } from '@services/loading-service';
@@ -14,6 +14,9 @@ import { PRIMENG_MODULES } from '../../../../primeng/primeng';
 import { ResponseUsuario } from '@models/usuario';
 import { MessageComponent } from '@shared/message/message.component'
 import { MessageModel } from '@models/message';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.component'
+import { SearchService } from '@services/search-service';
 
 
 @Component({
@@ -24,7 +27,9 @@ import { MessageModel } from '@models/message';
     ReactiveFormsModule,
     LoadingComponent,
     PRIMENG_MODULES,
-    MessageComponent
+    MessageComponent,
+    ModalBusquedaComponent
+
   ],
   templateUrl: './buseta.component.html',
   styleUrl: './buseta.component.scss'
@@ -36,33 +41,34 @@ export default class BusetaComponent implements OnInit {
 
   private guardarSubscription!: Subscription;
   private editarSubscription!: Subscription;
+  private buscarSubscription!: Subscription;
+  private searchSubscription!: Subscription;
   private readonly serviceEntity = inject(EntityService)
   private readonly serviceUsuario = inject(UsuarioService)
   private readonly serviceLoading = inject(LoadingService)
   private readonly serviceBuseta = inject(BusetaService)
+  private readonly serviceSearch = inject(SearchService)
  
 
   busetaForm!: FormGroup
 
-  ltsBusetas = this.serviceBuseta.ltsBusetas
-
-  buseta: BusetaModel = {
-    capacidad: 10,
-    description: "Buseta 1",
-    propietario: "Juan",
-    name: "cris",
-    conductorId: 1
-  }
 
   ltsUserConducotres = this.serviceUsuario.ltsUsuariosConducotres
+  ltsBusetas = this.serviceBuseta.ltsBusetas
+
   selectConductor!: ResponseUsuario
+  listSearchBusetas: BusetaModel[] = []
 
   message!: MessageModel
+
+  visible: boolean = false;
+  ref!: DynamicDialogRef;
 
 
   constructor(
     private serviceBarraMenu: BarraMenuService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialogService: DialogService, 
   ) {
 
 
@@ -94,13 +100,38 @@ export default class BusetaComponent implements OnInit {
       this.editar();
     });
 
+    this.buscarSubscription = this.serviceBarraMenu.getBuscarObservable().subscribe(() => {
+      this.buscar();
+    });    
+
+
+    this.searchSubscription = this.serviceSearch.getSearchValueObservable().subscribe((value: any) => {
+      console.log("llegagaga busqueueu")
+      console.log(value)
+
+      const busetas = this.ltsBusetas();
+      if (busetas && busetas.data && busetas.data.length > 0) {
+        console.log('Buscando en la lista de busetas');
+        this.listSearchBusetas = busetas.data.filter((buseta: BusetaModel) => buseta.id && buseta.id.toString().includes(value));
+        console.log('Resultado de la búsqueda:', this.listSearchBusetas);
+
+        if(this.listSearchBusetas.length == 1){
+          this.serviceEntity.setEntity(this.listSearchBusetas[0])
+        }
+        
+
+      }
+
+    });
+
+
     this.serviceLoading.loading$.subscribe((isLoading) => {
       this.enableLoading = isLoading;
     });
 
-    this.serviceEntity.setEntity(this.buseta)
 
     this.serviceUsuario.getLtsUsuariosConducotres()
+    this.serviceBuseta.getLtsBusetas()
 
     this.message = {
       title: '',
@@ -127,11 +158,31 @@ export default class BusetaComponent implements OnInit {
   ngOnDestroy() {
     this.guardarSubscription.unsubscribe();
     this.editarSubscription.unsubscribe();
+    this.buscarSubscription.unsubscribe();
+    this.searchSubscription.unsubscribe();
   }
 
   onSubmit(){
     this.validateForm()
   }
+
+  validateForm(): boolean{
+    let response = true
+    if(this.busetaForm.valid){
+      response = true;
+    }else{
+      this.message.description = "FALTAN CAMPOS DE LLENAR!!!"
+      this.message.icon = "pi pi-info"
+      this.message.title = "ADVERTENCIA"
+      this.message.colorIcon = "blue"
+      this.message.colorTitle= "blue"
+      this.message.visible = true
+      this.busetaForm.markAllAsTouched()
+      response = false;
+    }
+    return response
+  }
+
 
   handleMessageClosed() {
     this.message.description = ""
@@ -250,24 +301,55 @@ export default class BusetaComponent implements OnInit {
 
   private editar() {
 
+    console.log("editar")
   }
 
-  validateForm(): boolean{
-    let response = true
-    if(this.busetaForm.valid){
-      response = true;
-    }else{
-      this.message.description = "FALTAN CAMPOS DE LLENAR!!!"
-      this.message.icon = "pi pi-info"
-      this.message.title = "ADVERTENCIA"
-      this.message.colorIcon = "blue"
-      this.message.colorTitle= "blue"
-      this.message.visible = true
-      this.busetaForm.markAllAsTouched()
-      response = false;
-    }
-    return response
+  private buscar(){
+
+    console.log("buscar -->>>>>>>>>>>")
+
+    //this.visible = true;
+    
+    this.ref = this.dialogService.open(ModalBusquedaComponent, {
+      header: 'BUSCAR VEHICULO',
+      width: '30%',
+      data: {
+        visible: true,
+         content: '<p>Placa: </p>'
+      }
+    });
+
+    this.ref.onClose.subscribe((result: any) => {
+      console.log("cerarar")
+      console.log(result)
+      if (result) {
+        console.log("accion el cerrar")
+
+        const response = this.ltsBusetas()
+        if (response && response.data) {
+          response.data.forEach((buseta: BusetaModel) => {
+            console.log("item--->>>>>>")
+            console.log(buseta)
+            if(buseta.id  == result){
+              console.log("llelelalal")
+              this.busetaForm.patchValue({
+                nombre: buseta.name,
+                descripcion: buseta.description,
+                propietario: "",
+                capacidad: buseta.capacidad
+              });              
+            }
+          });
+        }
+    
+
+      }
+    });
+
+
+
   }
+
 
 
 }
