@@ -31,6 +31,10 @@ export class BusetaService{
     }
 
 
+    public editBuseta(buseta: BusetaModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Actualizar`, buseta);
+    }
+
     
 
 }

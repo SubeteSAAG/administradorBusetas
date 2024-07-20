@@ -232,11 +232,15 @@
           leaveActiveClass="slideup"
         >
           <img
-            src="assets/profile/coche.png"
+            src="assets/profile/perfil-de-usuario.png"
             class="mr-2"
             style="width: 28px; height: 28px"
           />
-          <span class="font-medium">Amy Elsner</span>
+          @if(userLogged){
+          <div class="font-medium">{{ userLogged.name }}</div>
+          } @else{
+          <div class="font-medium">No User</div>
+          }
           <i class="pi pi-chevron-up ml-auto"></i>
         </a>
       </div>
@@ -319,7 +323,11 @@
               style="width: 32px; height: 32px"
             />
             <div class="block lg:hidden">
-              <div class="text-900 font-medium">Josephine Lillard</div>
+              @if(userLogged){
+              <div class="text-900 font-medium">{{ userLogged.name }}</div>
+              } @else{
+              <div class="text-900 font-medium">No User</div>
+              }
               <span class="text-600 font-medium text-sm"
                 >Marketing Specialist</span
               >

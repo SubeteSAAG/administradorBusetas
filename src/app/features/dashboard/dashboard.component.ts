@@ -7,6 +7,8 @@ import { BarraMenuComponent} from '@shared/barra-menu/barra-menu.component'
 import { InformacionPersonaComponent} from '@shared/informacion-persona/informacion-persona.component'
 import { LoginService } from '@services/login-service'
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { Usuario } from '@models/response-login';
+import { TokenService } from '@services/token-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +26,9 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 })
 export default class DashboardComponent implements OnInit {
   
+
+  private readonly serviceToken = inject(TokenService)
+  userLogged: Usuario | null = null;
 
   ltsMenus: Menu[] = [
     
@@ -46,7 +51,7 @@ export default class DashboardComponent implements OnInit {
         }
       ]
     },
-    {
+    /*{
       id_menu: 2,
       nombre: 'Empresas',
       icono: 'pi pi-warehouse',
@@ -64,8 +69,8 @@ export default class DashboardComponent implements OnInit {
           submenus: []
         }
       ]
-    },
-    {
+    },*/
+    /*{
       id_menu: 3,
       nombre: 'Conductor',
       icono: 'pi pi-user',
@@ -84,7 +89,7 @@ export default class DashboardComponent implements OnInit {
 
         }
       ]
-    },
+    },*/
     {
       id_menu: 4,
       nombre: 'Busetas',
@@ -205,9 +210,6 @@ export default class DashboardComponent implements OnInit {
       ]
     }
 
-
-
-
   ];
 
 
@@ -222,6 +224,8 @@ export default class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
       console.log('init appp..>>')
+      this.userLogged = this.serviceToken.getDetailUser()
+
   }
 
   toggleMenu(menu: Menu) {
@@ -254,5 +258,6 @@ export default class DashboardComponent implements OnInit {
     this.serviceLogin.logout()
     this.route.navigate(["/login"])
   }
+
 
 }

@@ -10,7 +10,8 @@ export interface ResponseLogin{
 
 export interface usuario{
     usuario: Usuario,
-    token: string
+    token: string,
+    refreshToken: string
 }
 
 export interface Usuario{
@@ -27,5 +28,7 @@ export interface Usuario{
     isActive: boolean,
     id: number,
     domainEvents: any[];
+    empresaId?: number,
+    tipo?:  number
 
 }

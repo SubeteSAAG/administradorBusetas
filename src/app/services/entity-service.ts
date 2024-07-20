@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { BusetaModel } from '@models/buseta';
 import { UsuarioModel } from '@models/usuario'
+import { PasajeroModel } from '@models/pasajero';
+import { EstudianteModel } from '@models/estudiante';
 
-type Entity = BusetaModel | UsuarioModel ; // Agrega más tipos según sea necesario
+type Entity = BusetaModel | UsuarioModel | PasajeroModel | EstudianteModel ; 
 
 @Injectable({
   providedIn: 'root'

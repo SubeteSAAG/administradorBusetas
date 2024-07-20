@@ -14,11 +14,11 @@ export const routes: Routes = [
         canActivate: [ loginGuard ],
         loadComponent: () => import('@features/dashboard/dashboard.component'),
         children: [
-            {
+            /*{
                 path: 'conductor',
                 title: 'Conductor',
                 loadComponent: () => import('@features/pages/moduleConductor/conductor/conductor.component')
-            },
+            },*/
             {
                 path: 'empresa',
                 title: 'Empresa',
@@ -44,10 +44,16 @@ export const routes: Routes = [
                 title: 'Ruta',
                 loadComponent: () => import('@features/pages/moduleRuta/ruta/ruta.component')
             },
+            {
+                path: 'pasajero',
+                title: 'Pasajero',
+                loadComponent: () => import('@features/pages/modulePasajero/pasajero/pasajero.component')
+            },
+
 
             {
                 path: '',
-                redirectTo: '/dashboard/conductor',
+                redirectTo: '/dashboard/usuario',
                 pathMatch: 'full'
             }
         ]

@@ -28,7 +28,7 @@ export const ErrorApiInterceptor: HttpInterceptorFn = (
       }else{
         console.error(`Error code: ${error.status}, message: ${error.message}`);
       }
-      return throwError(() => new Error(`Error code: ${error.status}, message: ${error.message}`));
+      return throwError(() => error);
     })
   );
 };

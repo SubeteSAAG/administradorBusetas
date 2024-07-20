@@ -17,6 +17,7 @@ import { MessageModel } from '@models/message';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.component'
 import { SearchService } from '@services/search-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -58,10 +59,10 @@ export default class BusetaComponent implements OnInit {
 
   selectConductor!: ResponseUsuario
   listSearchBusetas: BusetaModel[] = []
+  idVehiculo: number = 0
 
   message!: MessageModel
 
-  visible: boolean = false;
   ref!: DynamicDialogRef;
 
 
@@ -78,6 +79,7 @@ export default class BusetaComponent implements OnInit {
     this.busetaForm = this.fb.group(
       {
         nombre: new FormControl('', [Validators.required]),
+        placa: new FormControl('', [Validators.required]),
         descripcion: new FormControl('', [Validators.required]),
         propietario: new FormControl('', [Validators.required]),
         capacidad: new FormControl('', [Validators.required]),
@@ -148,9 +150,12 @@ export default class BusetaComponent implements OnInit {
     this.serviceLoading.show()
     effect(() => {
       const response = this.ltsUserConducotres();
-      if (response) {
+      console.log("veirifiaccaca")
+      console.log(response)
+      if (response && response.data != null) {
+        console.log("verifica")
+        console.log(response)
         this.serviceLoading.hide()
-
       }
     });
   }
@@ -245,8 +250,8 @@ export default class BusetaComponent implements OnInit {
         description: formValues.descripcion,
         propietario: formValues.propietario,
         name: formValues.nombre,
+        placa: formValues.placa,
         conductorId: this.selectConductor.id
-  
       } 
 
       this.serviceLoading.show()
@@ -284,15 +289,27 @@ export default class BusetaComponent implements OnInit {
           this.serviceLoading.hide()
 
         },
-        error: (error: any) =>{
-          this.serviceLoading.hide()
-          this.message.description = ""+error.message
-          this.message.icon = "pi pi-times"
-          this.message.title = "CREACIÓN DE VEHICULO"
-          this.message.colorIcon = "red"
-          this.message.colorTitle= "red"
-          this.message.visible = true
-
+        error: (error: HttpErrorResponse) => {
+          this.serviceLoading.hide();
+          let apiResponse: ApiResponse;
+          try {
+            apiResponse = error.error as ApiResponse; 
+          } catch (e) {
+            apiResponse = {
+              success: false,
+              statusCode: error.status,
+              data: null,
+              message: error.message,
+              error: error.statusText
+            };
+          }
+      
+          this.message.description = apiResponse.message;
+          this.message.icon = "pi pi-times";
+          this.message.title = "CREACIÓN DE VEHICULO";
+          this.message.colorIcon = "red";
+          this.message.colorTitle = "red";
+          this.message.visible = true;
         }
       })
     }
@@ -301,7 +318,91 @@ export default class BusetaComponent implements OnInit {
 
   private editar() {
 
-    console.log("editar")
+    let valida = this.validateForm();
+    if(valida){
+
+      if(!this.selectConductor){
+        this.message.description = "TIENE QUE SELECCIONAR UN CONDUCTOR!!!"
+        this.message.icon = "pi pi-info"
+        this.message.title = "ADVERTENCIA"
+        this.message.colorIcon = "blue"
+        this.message.colorTitle= "blue"
+        this.message.visible = true
+        return
+      }
+      const formValues =  this.busetaForm.getRawValue();
+      const buseta: BusetaModel = {
+        id: this.idVehiculo,
+        capacidad: formValues.capacidad,
+        description: formValues.descripcion,
+        propietario: formValues.propietario,
+        name: formValues.nombre,
+        placa: formValues.placa,
+  
+      } 
+
+      this.serviceLoading.show()
+
+      this.serviceBuseta.editBuseta(buseta).subscribe({
+        next: (response: ApiResponse) =>{
+          console.log("resssssss")
+          console.log(response)
+          if(response.statusCode == 200){
+            this.message.description = "BUSETA ACTUALIZADA CORRECTAMENTE!!!"
+            this.message.icon = "pi pi-car"
+            this.message.title = "CREACIÓN DE VEHICULO"
+            this.message.colorIcon = "green"
+            this.message.colorTitle= "green"
+            this.message.visible = true
+            this.serviceBuseta.getLtsBusetas()
+          }else{
+            this.serviceLoading.hide()
+            this.message.description = response.message
+            this.message.icon = "pi pi-times"
+            this.message.title = "ERROR AL PROCESAR SOLICITUD"
+            this.message.colorIcon = "red"
+            this.message.colorTitle= "red"
+            this.message.visible = true
+
+          }
+        },
+        complete: () =>{
+          const response = this.ltsUserConducotres();
+          if (response && response.data) {
+            response.data.forEach((conductor: ResponseUsuario) => {
+              conductor.selected = false;
+            });
+          }
+          this.busetaForm.reset()
+          this.serviceLoading.hide()
+
+        },
+        error: (error: HttpErrorResponse) => {
+          this.serviceLoading.hide();
+          let apiResponse: ApiResponse;
+          try {
+            apiResponse = error.error as ApiResponse; 
+          } catch (e) {
+            apiResponse = {
+              success: false,
+              statusCode: error.status,
+              data: null,
+              message: error.message,
+              error: error.statusText
+            };
+          }
+      
+          this.message.description = apiResponse.message;
+          this.message.icon = "pi pi-times";
+          this.message.title = "ACTUALIZACIÓN DE VEHICULO";
+          this.message.colorIcon = "red";
+          this.message.colorTitle = "red";
+          this.message.visible = true;
+        }
+      })
+    }
+
+    
   }
 
   private buscar(){
@@ -332,6 +433,7 @@ export default class BusetaComponent implements OnInit {
             console.log(buseta)
             if(buseta.id  == result){
               console.log("llelelalal")
+              this.idVehiculo = buseta.id || 0
               this.busetaForm.patchValue({
                 nombre: buseta.name,
                 descripcion: buseta.description,

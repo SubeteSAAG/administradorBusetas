@@ -142,7 +142,7 @@ export default class UsuarioComponent {
     console.log("mando info")
     //this.serviceEntity.setEntity(this.user)
 
-    this.responsiveOptions = [
+    /*this.responsiveOptions = [
       {
           breakpoint: '1400px',
           numVisible: 3,
@@ -158,7 +158,7 @@ export default class UsuarioComponent {
           numVisible: 1,
           numScroll: 1
       }
-    ];
+    ];*/
   }
 
 

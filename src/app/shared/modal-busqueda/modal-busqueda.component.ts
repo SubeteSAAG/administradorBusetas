@@ -38,6 +38,10 @@ export class ModalBusquedaComponent implements OnInit {
     }
 
   }
+
+  ngOnDestroy(): void {
+    this.ref.close(this.value);
+  }
   
 
   onInputChange(event: any) {
