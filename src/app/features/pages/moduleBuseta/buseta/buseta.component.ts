@@ -11,7 +11,7 @@ import { ApiResponse } from '@models/api-response';
 import { EntityService } from '@services/entity-service';
 import { UsuarioService } from '@services/usuario-service';
 import { PRIMENG_MODULES } from '../../../../primeng/primeng';
-import { ResponseUsuario } from '@models/usuario';
+import { ResponseUsuario, UsuarioModel } from '@models/usuario';
 import { MessageComponent } from '@shared/message/message.component'
 import { MessageModel } from '@models/message';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -81,7 +81,7 @@ export default class BusetaComponent implements OnInit {
         nombre: new FormControl('', [Validators.required]),
         placa: new FormControl('', [Validators.required]),
         descripcion: new FormControl('', [Validators.required]),
-        propietario: new FormControl('', [Validators.required]),
+        propietario: null,
         capacidad: new FormControl('', [Validators.required]),
       }
     )
@@ -114,7 +114,7 @@ export default class BusetaComponent implements OnInit {
       const busetas = this.ltsBusetas();
       if (busetas && busetas.data && busetas.data.length > 0) {
         console.log('Buscando en la lista de busetas');
-        this.listSearchBusetas = busetas.data.filter((buseta: BusetaModel) => buseta.id && buseta.id.toString().includes(value));
+        this.listSearchBusetas = busetas.data.filter((buseta: BusetaModel) => buseta.placa && buseta.placa.toString().toUpperCase().includes(value) || buseta.id?.toString().toUpperCase().includes(value)) ;
         console.log('Resultado de la búsqueda:', this.listSearchBusetas);
 
         if(this.listSearchBusetas.length == 1){
@@ -350,7 +350,7 @@ export default class BusetaComponent implements OnInit {
           if(response.statusCode == 200){
             this.message.description = "BUSETA ACTUALIZADA CORRECTAMENTE!!!"
             this.message.icon = "pi pi-car"
-            this.message.title = "CREACIÓN DE VEHICULO"
+            this.message.title = "ACTUALIZACIÓN DE VEHICULO"
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
@@ -429,16 +429,20 @@ export default class BusetaComponent implements OnInit {
         const response = this.ltsBusetas()
         if (response && response.data) {
           response.data.forEach((buseta: BusetaModel) => {
-            console.log("item--->>>>>>")
-            console.log(buseta)
-            if(buseta.id  == result){
+            if(buseta.placa  == result || buseta.id == result){
               console.log("llelelalal")
+              const conductorEncontrado = this.ltsUserConducotres().data.find((conductor: ResponseUsuario) => conductor.id == buseta.conductorId)
+              if(conductorEncontrado){
+                conductorEncontrado.selected = true
+                this.selectConductor = conductorEncontrado
+              }
               this.idVehiculo = buseta.id || 0
               this.busetaForm.patchValue({
                 nombre: buseta.name,
                 descripcion: buseta.description,
                 propietario: "",
-                capacidad: buseta.capacidad
+                capacidad: buseta.capacidad,
+                placa: buseta.placa
               });              
             }
           });

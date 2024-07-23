@@ -4,8 +4,9 @@ import { BusetaModel } from '@models/buseta';
 import { UsuarioModel } from '@models/usuario'
 import { PasajeroModel } from '@models/pasajero';
 import { EstudianteModel } from '@models/estudiante';
+import { RutaModel } from '@models/ruta';
 
-type Entity = BusetaModel | UsuarioModel | PasajeroModel | EstudianteModel ; 
+type Entity = BusetaModel | UsuarioModel | PasajeroModel | EstudianteModel | RutaModel ; 
 
 @Injectable({
   providedIn: 'root'
