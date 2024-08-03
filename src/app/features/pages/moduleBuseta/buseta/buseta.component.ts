@@ -18,7 +18,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.component'
 import { SearchService } from '@services/search-service';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { UppercaseDirective } from '@utils/uppercase.directive'
 
 @Component({
   selector: 'app-buseta',
@@ -29,9 +29,10 @@ import { HttpErrorResponse } from '@angular/common/http';
     LoadingComponent,
     PRIMENG_MODULES,
     MessageComponent,
-    ModalBusquedaComponent
-
+    ModalBusquedaComponent,
+    UppercaseDirective
   ],
+  
   templateUrl: './buseta.component.html',
   styleUrl: './buseta.component.scss'
 })
@@ -114,8 +115,10 @@ export default class BusetaComponent implements OnInit {
       const busetas = this.ltsBusetas();
       if (busetas && busetas.data && busetas.data.length > 0) {
         console.log('Buscando en la lista de busetas');
-        this.listSearchBusetas = busetas.data.filter((buseta: BusetaModel) => buseta.placa && buseta.placa.toString().toUpperCase().includes(value) || buseta.id?.toString().toUpperCase().includes(value)) ;
+        this.listSearchBusetas = busetas.data.filter((buseta: BusetaModel) => buseta.placa && buseta.placa.toString().toUpperCase() === value.toUpperCase() || buseta.id?.toString().toUpperCase() === (value.toUpperCase())) ;
         console.log('Resultado de la búsqueda:', this.listSearchBusetas);
+
+
 
         if(this.listSearchBusetas.length == 1){
           this.serviceEntity.setEntity(this.listSearchBusetas[0])
@@ -161,10 +164,18 @@ export default class BusetaComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.guardarSubscription.unsubscribe();
-    this.editarSubscription.unsubscribe();
-    this.buscarSubscription.unsubscribe();
-    this.searchSubscription.unsubscribe();
+    if(this.guardarSubscription){
+      this.guardarSubscription.unsubscribe();
+    }
+    if(this.editarSubscription){
+      this.editarSubscription.unsubscribe();
+    }
+    if(this.buscarSubscription){
+      this.buscarSubscription.unsubscribe();
+    }
+    if(this.searchSubscription){
+      this.searchSubscription.unsubscribe();
+    }
   }
 
   onSubmit(){
@@ -267,6 +278,7 @@ export default class BusetaComponent implements OnInit {
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
+            this.serviceBuseta.getLtsBusetas()
           }else{
             this.serviceLoading.hide()
             this.message.description = response.message
@@ -279,13 +291,7 @@ export default class BusetaComponent implements OnInit {
           }
         },
         complete: () =>{
-          const response = this.ltsUserConducotres();
-          if (response && response.data) {
-            response.data.forEach((conductor: ResponseUsuario) => {
-              conductor.selected = false;
-            });
-          }
-          this.busetaForm.reset()
+          this.clear()
           this.serviceLoading.hide()
 
         },
@@ -355,6 +361,9 @@ export default class BusetaComponent implements OnInit {
             this.message.colorTitle= "green"
             this.message.visible = true
             this.serviceBuseta.getLtsBusetas()
+            this.serviceEntity.setEntity(response.data)
+
+
           }else{
             this.serviceLoading.hide()
             this.message.description = response.message
@@ -367,13 +376,6 @@ export default class BusetaComponent implements OnInit {
           }
         },
         complete: () =>{
-          const response = this.ltsUserConducotres();
-          if (response && response.data) {
-            response.data.forEach((conductor: ResponseUsuario) => {
-              conductor.selected = false;
-            });
-          }
-          this.busetaForm.reset()
           this.serviceLoading.hide()
 
         },
@@ -407,10 +409,8 @@ export default class BusetaComponent implements OnInit {
 
   private buscar(){
 
-    console.log("buscar -->>>>>>>>>>>")
+    this.clear()
 
-    //this.visible = true;
-    
     this.ref = this.dialogService.open(ModalBusquedaComponent, {
       header: 'BUSCAR VEHICULO',
       width: '30%',
@@ -425,11 +425,11 @@ export default class BusetaComponent implements OnInit {
       console.log(result)
       if (result) {
         console.log("accion el cerrar")
-
+        let resultFound = false
         const response = this.ltsBusetas()
         if (response && response.data) {
           response.data.forEach((buseta: BusetaModel) => {
-            if(buseta.placa  == result || buseta.id == result){
+            if(buseta.placa.toUpperCase() === result.toUpperCase() || buseta.id == result){
               console.log("llelelalal")
               const conductorEncontrado = this.ltsUserConducotres().data.find((conductor: ResponseUsuario) => conductor.id == buseta.conductorId)
               if(conductorEncontrado){
@@ -443,19 +443,39 @@ export default class BusetaComponent implements OnInit {
                 propietario: "",
                 capacidad: buseta.capacidad,
                 placa: buseta.placa
-              });              
+              }); 
+                  
+              resultFound = true
             }
           });
+          if(!resultFound){
+            this.message.description = "NO SE ENCONTRO LA PLACA INGRESADA"
+            this.message.icon = "pi pi-info"
+            this.message.title = "ADVERTENCIA"
+            this.message.colorIcon = "blue"
+            this.message.colorTitle= "blue"
+            this.message.visible = true
+    
+          }
         }
     
 
       }
     });
-
-
-
   }
 
+  clear(){
+    const response = this.ltsUserConducotres();
+    if (response && response.data) {
+      response.data.forEach((conductor: ResponseUsuario) => {
+        conductor.selected = false;
+      });
+    }
+    this.listSearchBusetas = []
+    this.busetaForm.reset()
+    this.serviceEntity.setEntity(this.listSearchBusetas[0])
+
+  }
 
 
 }

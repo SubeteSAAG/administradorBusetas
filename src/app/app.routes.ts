@@ -49,7 +49,11 @@ export const routes: Routes = [
                 title: 'Pasajero',
                 loadComponent: () => import('@features/pages/modulePasajero/pasajero/pasajero.component')
             },
-
+            {
+                path: 'asignacion-buseta',
+                title: 'Asignaciones de Buseta',
+                loadComponent: () => import('@features/pages/moduleBuseta/asignaciones/asignaciones.component')
+            },
 
             {
                 path: '',

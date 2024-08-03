@@ -48,6 +48,7 @@
         class="custom-input"
         placeholder="Placa"
         formControlName="placa"
+        appUppercase
       />
       @if(busetaForm.get('placa')?.hasError('required') &&
       busetaForm.get('placa')?.touched){

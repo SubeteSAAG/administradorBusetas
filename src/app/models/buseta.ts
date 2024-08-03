@@ -13,5 +13,6 @@ export interface BusetaModel{
     isDeleted?: boolean,
     isActived?: boolean,
     placa: string
+    selected?: boolean;
 
 }

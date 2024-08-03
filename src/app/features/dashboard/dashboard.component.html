@@ -343,9 +343,12 @@
           class="border-2 border-dashed surface-border border-round surface-section flex-auto"
           style="width: 100%; display: flex; flex-direction: column"
         >
+          @if(vidibelComponents){
           <app-barra-menu></app-barra-menu>
+          }
 
           <div class="flex flex-auto" style="width: 100%; display: flex">
+            @if(vidibelComponents){
             <div style="width: 25%; padding: 1rem">
               <app-informacion-persona
                 class="flex-auto"
@@ -355,6 +358,12 @@
             <div style="width: 75%; padding-top: 1rem; margin-right: 1rem">
               <router-outlet></router-outlet>
             </div>
+
+            } @else{
+            <div style="width: 100%; padding-top: 1rem; margin-right: 1rem">
+              <router-outlet></router-outlet>
+            </div>
+            }
           </div>
         </div>
       </div>

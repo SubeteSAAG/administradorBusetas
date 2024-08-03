@@ -1,0 +1,58 @@
+<h4 style="padding: 5px">GESTIÓN DE ASIGNACIONES</h4>
+
+@if(ltsBusetas()){
+<div class="card-table">
+  <p-table
+    #dt1
+    [value]="ltsBusetas().data"
+    [tableStyle]="{ 'min-width': '40rem' }"
+    responsiveLayout="stack"
+    [paginator]="true"
+    [rows]="5"
+    [globalFilterFields]="['placa']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <button
+          pButton
+          class="p-button-outlined"
+          icon="pi pi-refresh"
+          (click)="recargar()"
+        ></button>
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="BUSCAR BUSETA"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 25%">Placa</th>
+        <th style="width: 25%">Tipo Vehiculo</th>
+        <th style="width: 25%">Marca</th>
+        <th style="width: 20%">Agregar Ruta</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-buseta>
+      <tr>
+        <td>{{ buseta.placa }}</td>
+        <td>{{ buseta.nanme }}</td>
+        <td>{{ buseta.descripcion }}</td>
+        <td>
+          <p-checkbox
+            [binary]="true"
+            inputId="binary"
+            [(ngModel)]="buseta.selected"
+            (click)="openModal(buseta)"
+          ></p-checkbox>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+}

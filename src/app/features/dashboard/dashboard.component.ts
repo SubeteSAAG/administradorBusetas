@@ -9,6 +9,8 @@ import { LoginService } from '@services/login-service'
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { Usuario } from '@models/response-login';
 import { TokenService } from '@services/token-service';
+import { BusetaModel } from '@models/buseta';
+import { EntityService } from '@services/entity-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +30,17 @@ export default class DashboardComponent implements OnInit {
   
 
   private readonly serviceToken = inject(TokenService)
+  private readonly serviceEntity = inject(EntityService)
   userLogged: Usuario | null = null;
+  listSearchBusetas: BusetaModel[] = []
+  vidibelComponents: boolean = true
+  ltsPathsIndependientes: any[] = [
+    {
+      id_menu: 2,
+      path: 'asignacion-buseta',
+    },
+  ]
+
 
   ltsMenus: Menu[] = [
     
@@ -109,10 +121,10 @@ export default class DashboardComponent implements OnInit {
         },
         {
           id_menu: 2,
-          nombre: 'Asignación',
+          nombre: 'Asignaciones',
           icono: 'pi pi-comments',
           estado: true,
-          path: '/dashboard/asignarBuseta',
+          path: '/dashboard/asignacion-buseta',
           isOpen: false,
           submenus: []
 
@@ -219,6 +231,7 @@ export default class DashboardComponent implements OnInit {
     private route: Router
   ){
 
+    
   }
 
 
@@ -226,6 +239,10 @@ export default class DashboardComponent implements OnInit {
       console.log('init appp..>>')
       this.userLogged = this.serviceToken.getDetailUser()
 
+  }
+
+  clearPanel(){
+    this.serviceEntity.setEntity(this.listSearchBusetas[0])
   }
 
   toggleMenu(menu: Menu) {
@@ -238,10 +255,18 @@ export default class DashboardComponent implements OnInit {
 
   navigate(path: string) {
     if (path) {
-      //console.log("clik menu")
-      //this.serviceEntity.setEntity(this.user)
+      console.log(path)
+      console.log(path.split('/')[2])
+      const index = this.ltsPathsIndependientes.findIndex(item => item.path === path.split('/')[2])
+      console.log("indeccccxxxx")
+      console.log(index)
+      if(index != -1){
+        this.vidibelComponents = false
+      }else{
+        this.vidibelComponents = true
+      }
       this.route.navigate([path]);
-
+      this.clearPanel()
     }
   }
 

@@ -154,10 +154,18 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.guardarSubscription.unsubscribe();
-    this.editarSubscription.unsubscribe();
-    this.buscarSubscription.unsubscribe();
-    this.searchSubscription.unsubscribe();
+    if(this.guardarSubscription){
+      this.guardarSubscription.unsubscribe();
+    }
+    if(this.editarSubscription){
+      this.editarSubscription.unsubscribe();
+    }
+    if(this.buscarSubscription){
+      this.buscarSubscription.unsubscribe();
+    }
+    if(this.searchSubscription){
+      this.searchSubscription.unsubscribe();
+    }
 
   }
 
