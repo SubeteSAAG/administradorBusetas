@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject, signal } from "@angular/core";
 import { environment } from "@envs/environment";
 import { ApiResponse } from "@models/api-response";
-import { BusetaModel } from "@models/buseta";
+import { AsignarBusetaRutaModel, BusetaModel } from "@models/buseta";
 import { Observable, tap } from "rxjs";
 
 @Injectable({
@@ -33,6 +33,11 @@ export class BusetaService{
 
     public editBuseta(buseta: BusetaModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Actualizar`, buseta);
+    }
+
+
+    public asignarBusetaRuta(asignar: AsignarBusetaRutaModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/AsignarBusetaRuta`, asignar);
     }
 
     

@@ -12,6 +12,7 @@ export interface RutaModel {
     isActive?: boolean,
     id?: number,
     domainEvents?: any[]
+    selected?: boolean;
 }
 
 

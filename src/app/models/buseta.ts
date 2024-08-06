@@ -16,3 +16,8 @@ export interface BusetaModel{
     selected?: boolean;
 
 }
+
+export interface AsignarBusetaRutaModel {
+    busetaId: number,
+    rutaId: number
+}

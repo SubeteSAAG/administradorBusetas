@@ -25,6 +25,7 @@ import { CheckboxModule } from 'primeng/checkbox'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
+import { SidebarModule } from 'primeng/sidebar';
 
 export const PRIMENG_MODULES = [
     ButtonModule,
@@ -53,6 +54,7 @@ export const PRIMENG_MODULES = [
     CheckboxModule,
     FloatLabelModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    SidebarModule
 
   ];

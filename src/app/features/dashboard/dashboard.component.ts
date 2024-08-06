@@ -121,7 +121,7 @@ export default class DashboardComponent implements OnInit {
         },
         {
           id_menu: 2,
-          nombre: 'Asignaciones',
+          nombre: 'Gestión de Busetas',
           icono: 'pi pi-comments',
           estado: true,
           path: '/dashboard/asignacion-buseta',

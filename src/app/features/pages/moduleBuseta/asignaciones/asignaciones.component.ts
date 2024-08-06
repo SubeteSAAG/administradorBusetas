@@ -1,12 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BusetaModel } from '@models/buseta';
+import { AsignarBusetaRutaModel, BusetaModel } from '@models/buseta';
 import { BusetaService } from '@services/buseta-service';
 import { PRIMENG_MODULES } from '../../../../primeng/primeng';
 import { LoadingService } from '@services/loading-service';
 import { LoadingComponent } from '@shared/loading/loading.component'
-import { ApiResponse } from '@models/api-response';
 import { MessageComponent } from '@shared/message/message.component'
+import { RutaService } from '@services/ruta-service';
+import { hoarioModel, RutaModel } from '@models/ruta';
+import { MessageModel } from '@models/message';
+import { ApiResponse } from '@models/api-response';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-asignaciones',
@@ -24,12 +29,65 @@ import { MessageComponent } from '@shared/message/message.component'
 export default class AsignacionesComponent implements OnInit{
 
   private readonly serviceBuseta = inject(BusetaService)
+  private readonly serviceLoading = inject(LoadingService)
+  private readonly serviceRuta = inject(RutaService)
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
+  ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
+  selectRuta!: RutaModel
+  enableLoading = false
+  sidebarVisible = false
+  message!: MessageModel
+  busetaId: number = 0
+  rutaId:  number = 0  
+
+
+  constructor(){
+    this.getListBusetas()
+  }
 
   ngOnInit(): void {
-  
     this.serviceBuseta.getLtsBusetas()
+    this.serviceRuta.getLtsRutaByEmpresa()
+    this.serviceLoading.loading$.subscribe((isLoading) => {
+      this.enableLoading = isLoading;
+    });
+    this.message = {
+      title: '',
+      colorTitle: '',
+      description: '',
+      icon: '',
+      colorIcon: '',
+      visible: false
+    };
+
+  }
+
+  handleMessageClosed() {
+    this.message.description = ""
+    this.message.icon = ""
+    this.message.title = ""
+    this.message.colorIcon = ""
+    this.message.colorTitle = ""
+    this.message.visible = false
+
+  }
+
+
+  getListBusetas(){
+    this.serviceLoading.show()
+    effect(() => {
+      const response = this.ltsBusetas()
+      if (response && response.data != null) {
+        if(response.statusCode === 200){
+          console.log("verifica")
+          this.serviceLoading.hide()
+        }
+        if(response.statusCode != 200){
+          this.serviceLoading.hide()
+        }
+      }
+    });
   }
 
 
@@ -37,8 +95,122 @@ export default class AsignacionesComponent implements OnInit{
 
   }
 
-  openModal(buseta: BusetaModel){
+  recargarRutas(){
 
+  }
+
+  getRutaSelected(rutaOption: RutaModel){
+
+    this.selectRuta = rutaOption
+    this.rutaId = rutaOption.id ?? 0
+    const response = this.ltsRutaByEmpresa();
+    if (response && response.data) {
+      response.data.forEach((ruta: RutaModel) => {
+        ruta.selected = ruta === rutaOption;
+      });
+    }
+
+
+  }
+
+  getHorario(horarios: string): string | undefined {
+    const horariosArray: hoarioModel[] = JSON.parse(horarios);
+
+    let result = '';
+
+    horariosArray.forEach((horario) => {
+      const diaStr = horario.Dia !== undefined ? 'Dia ' + horario.Dia.toString() : '';
+      const nombreDiaStr = horario.NombreDia !== undefined ? '' + horario.NombreDia : '';
+      const horaSalidaStr = horario.HoraSalida !== undefined ? 'Salida ' + horario.HoraSalida.toString() : '';
+      const horaLlegadaStr = horario.HoraLlegada !== undefined ? 'LLegada ' + horario.HoraLlegada.toString() : '';
+
+        result += `${diaStr} ${nombreDiaStr} ${horaSalidaStr} ${horaLlegadaStr}\n`;
+    });
+
+    return result.trim();
+  }
+
+  agregarRuta(){
+
+    if(this.selectRuta){
+
+      this.serviceLoading.show()
+      const asignar: AsignarBusetaRutaModel = {
+        busetaId: this.busetaId,
+        rutaId: this.rutaId
+      } 
+
+
+      this.serviceBuseta.asignarBusetaRuta(asignar).subscribe({
+        next: (response: ApiResponse) =>{
+          console.log("resssssss")
+          console.log(response)
+          if(response.statusCode == 200){
+            this.message.description = "RUTA ASIGNADA CORRECTAMENTE"
+            this.message.icon = "pi pi-car"
+            this.message.title = "ASIGNACIÓN DE RUTA"
+            this.message.colorIcon = "green"
+            this.message.colorTitle= "green"
+            this.message.visible = true
+            this.serviceRuta.getLtsRutaByEmpresa()
+            this.sidebarVisible = false
+          }else{
+            this.serviceLoading.hide()
+            this.message.description = response.message
+            this.message.icon = "pi pi-times"
+            this.message.title = "ERROR AL PROCESAR SOLICITUD"
+            this.message.colorIcon = "red"
+            this.message.colorTitle= "red"
+            this.message.visible = true
+
+          }
+        },
+        complete: () =>{
+          this.serviceLoading.hide()
+
+        },
+        error: (error: HttpErrorResponse) => {
+          this.serviceLoading.hide();
+          let apiResponse: ApiResponse;
+          try {
+            apiResponse = error.error as ApiResponse; 
+          } catch (e) {
+            apiResponse = {
+              success: false,
+              statusCode: error.status,
+              data: null,
+              message: error.message,
+              error: error.statusText
+            };
+          }
+      
+          this.message.description = apiResponse.message;
+          this.message.icon = "pi pi-times";
+          this.message.title = "ASIGNACIÓN DE RUTA";
+          this.message.colorIcon = "red";
+          this.message.colorTitle = "red";
+          this.message.visible = true;
+        }
+      })
+
+
+
+    }else{
+      this.message.description = "TIENE QUE SELECCIONAR UNA RUTA"
+      this.message.icon = "pi pi-info"
+      this.message.title = "ADVERTENCIA"
+      this.message.colorIcon = "blue"
+      this.message.colorTitle= "blue"
+      this.message.visible = true
+
+    }
+
+  }
+
+
+  openModal(buseta: BusetaModel){
+    this.busetaId = buseta.id ?? 0
+    this.sidebarVisible = true
   }
 
 
