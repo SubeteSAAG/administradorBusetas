@@ -39,6 +39,10 @@ export default class DashboardComponent implements OnInit {
       id_menu: 2,
       path: 'asignacion-buseta',
     },
+    {
+      id_menu: 2,
+      path: 'gestion-pasajero'
+    }
   ]
 
 
@@ -170,10 +174,10 @@ export default class DashboardComponent implements OnInit {
         },
         {
           id_menu: 2,
-          nombre: 'Asignación',
+          nombre: 'Gestión Pasajeros',
           icono: 'pi pi-comments',
           estado: true,
-          path: '/asignarRuta',
+          path: '/dashboard/gestion-pasajero',
           isOpen: false,
           submenus: []
 

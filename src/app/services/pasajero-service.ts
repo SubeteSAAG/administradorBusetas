@@ -3,7 +3,7 @@ import { Injectable, inject, signal } from "@angular/core";
 import { environment } from "@envs/environment.development";
 import { ApiResponse } from "@models/api-response";
 import { EstudianteModel } from "@models/estudiante";
-import { PasajeroModel } from "@models/pasajero";
+import { PasajeroEditModel, PasajeroModel } from "@models/pasajero";
 import { Observable, tap } from "rxjs";
 
 @Injectable({
@@ -30,7 +30,7 @@ export class PasajeroService{
     }
 
 
-    public editPasajero(pasajero: PasajeroModel): Observable<ApiResponse> {
+    public editPasajero(pasajero: PasajeroEditModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Actualizar`, pasajero);
     }
 

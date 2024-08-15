@@ -14,7 +14,7 @@ import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.com
 import { SearchService } from '@services/search-service';
 import { LoadingService } from '@services/loading-service';
 import { PasajeroService } from '@services/pasajero-service';
-import { PasajeroModel } from '@models/pasajero';
+import { PasajeroEditModel, PasajeroModel } from '@models/pasajero';
 import { InformacionPersonalModel } from '@models/informacion-personal';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -118,7 +118,7 @@ export default class PasajeroComponent implements OnInit {
       const pasajero = this.ltsPasajeros();
       if (pasajero && pasajero.data && pasajero.data.length > 0) {
         console.log('Buscando en la lista de busetas');
-        this.listSearchPasajeros = pasajero.data.filter((pasajero: PasajeroModel) => pasajero.id && pasajero.id.toString().includes(value));
+        this.listSearchPasajeros = pasajero.data.filter((pasajero: PasajeroModel) => pasajero.id && pasajero.id.toString().toUpperCase() === value.toUpperCase());
         console.log('Resultado de la búsqueda:', this.listSearchPasajeros);
 
         if(this.listSearchPasajeros.length == 1){
@@ -291,9 +291,9 @@ export default class PasajeroComponent implements OnInit {
         direccion: formValues.direccion
       }
 
-      const pasajero: PasajeroModel = {
+      const pasajero: PasajeroEditModel = {
         id: this.idPasajero,
-        informacionPersonal: informacion,
+        infoPersonal: informacion,
       } 
 
       this.servicePasajero.editPasajero(pasajero).subscribe({
@@ -366,6 +366,7 @@ export default class PasajeroComponent implements OnInit {
       console.log(result)
       if (result) {
         const response = this.ltsPasajeros()
+        let resultFound = false
         if (response && response.data) {
           response.data.forEach((pasajero: PasajeroModel) => {
             if(pasajero.id  == result){
@@ -383,9 +384,19 @@ export default class PasajeroComponent implements OnInit {
                 celular: pasajero.informacionPersonal.celular,
                 fechaNacimiento: formattedDate,
                 direccion: pasajero.informacionPersonal.direccion, 
-              });              
+              });   
+              resultFound = true           
             }
           });
+          if(!resultFound){
+            this.message.description = "NO SE ENCONTRO EL PASAJERO"
+            this.message.icon = "pi pi-info"
+            this.message.title = "ADVERTENCIA"
+            this.message.colorIcon = "blue"
+            this.message.colorTitle= "blue"
+            this.message.visible = true
+         }
+
         }
     
 

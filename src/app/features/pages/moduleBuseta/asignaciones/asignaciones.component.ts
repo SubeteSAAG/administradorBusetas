@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, EventEmitter, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AsignarBusetaRutaModel, BusetaModel } from '@models/buseta';
 import { BusetaService } from '@services/buseta-service';
@@ -34,12 +34,16 @@ export default class AsignacionesComponent implements OnInit{
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
   ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
+  ltsRutasByBuseta = this.serviceRuta.ltsRutasByBuseta
+  ltsPasajerosByRutaBuseta = this.serviceRuta.ltsPasajerosByRutaBuseta
   selectRuta!: RutaModel
   enableLoading = false
   sidebarVisible = false
   message!: MessageModel
   busetaId: number = 0
   rutaId:  number = 0  
+
+  @ViewChild('stepperPanel') stepperPanel: any;
 
 
   constructor(){
@@ -211,6 +215,21 @@ export default class AsignacionesComponent implements OnInit{
   openModal(buseta: BusetaModel){
     this.busetaId = buseta.id ?? 0
     this.sidebarVisible = true
+  }
+
+  handleNextClick(nextCallback: EventEmitter<any>, buseta: BusetaModel) {
+    console.log('Next button clicked');
+    console.log(buseta.id)
+    this.serviceRuta.getLtsRutasByBuseta(buseta.id ?? 0)
+    
+    nextCallback.emit();
+  }
+
+  handleNextClick2(nextCallback: EventEmitter<any>, ruta: any) {
+    console.log('Next button clicked');
+    this.serviceRuta.getLtsPasajerosByRutaBuseta(1)
+    
+    nextCallback.emit();
   }
 
 

@@ -26,6 +26,7 @@ import { FloatLabelModule } from 'primeng/floatlabel'
 import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
 import { SidebarModule } from 'primeng/sidebar';
+import { StepperModule } from 'primeng/stepper';
 
 export const PRIMENG_MODULES = [
     ButtonModule,
@@ -55,6 +56,7 @@ export const PRIMENG_MODULES = [
     FloatLabelModule,
     IconFieldModule,
     InputIconModule,
-    SidebarModule
+    SidebarModule,
+    StepperModule
 
   ];
