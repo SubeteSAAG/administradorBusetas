@@ -10,7 +10,7 @@ import { LoadingService } from '@services/loading-service';
 import { EntityService } from '@services/entity-service';
 import { UsuarioService } from '@services/usuario-service';
 import { ResponseUsuario } from '@models/usuario';
-import { EstudianteModel } from '@models/estudiante';
+import { coords, EstudianteModel, ubicacion } from '@models/estudiante';
 import { EstudianteService } from '@services/estudiante-service';
 import { ApiResponse } from '@models/api-response';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -135,7 +135,7 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
       const estudinate = this.ltsEstudiantes();
       if (estudinate && estudinate.data && estudinate.data.length > 0) {
         console.log('Buscando en la lista de estudinats');
-        this.listSearchEstudiantes = estudinate.data.filter((estudiante: EstudianteModel) => estudiante.id && estudiante.id.toString().includes(value));
+        this.listSearchEstudiantes = estudinate.data.filter((estudiante: EstudianteModel) => estudiante.informacionPersonal?.identificacion.toString().toUpperCase() === value.toUpperCase() || estudiante.id?.toString().toUpperCase() === value.toUpperCase());
         console.log('Resultado de la búsqueda:', this.listSearchEstudiantes);
 
         if(this.listSearchEstudiantes.length == 1){
@@ -284,6 +284,7 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
+            this.serviceEstudent.getLtsEstuaintes()
           }else{
             this.serviceLoading.hide()
             this.message.description = response.message
@@ -298,13 +299,14 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
 
         },
         complete: () => {
-          const response = this.ltsUserRepresentantes();
+          /*const response = this.ltsUserRepresentantes();
           if (response && response.data) {
             response.data.forEach((representante: ResponseUsuario) => {
               representante.selected = false;
             });
           }
-          this.estudianteForm.reset()
+          this.estudianteForm.reset()*/
+          this.clear()
           this.serviceLoading.hide()
 
         },
@@ -356,7 +358,10 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
       const formValues =  this.estudianteForm.getRawValue();
       const fechaNacimiento = formValues.fechaNacimiento ? new Date(formValues.fechaNacimiento).toISOString() : null;
 
+
+
       const informacion: InformacionPersonalModel = {
+        id: this.idEstudiante,
         nombres: formValues.nombres,
         apellidos: formValues.apellidos,
         sobreNombre: formValues.sobreNombre,
@@ -369,10 +374,13 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
       }
 
 
+
       const estudiante: EstudianteModel = {
         estudianteId: this.idEstudiante,
         infoPersonal: informacion,
-        representanteId: this.selectRepresentante.id
+        representanteId: this.selectRepresentante.id,
+        direccionDomicilio: "",
+        ubicacion: null
       } 
 
       this.serviceLoading.show()
@@ -389,6 +397,7 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
             this.message.colorTitle= "green"
             this.message.visible = true
             this.serviceEstudent.getLtsEstuaintes()
+            this.serviceEntity.setEntity(response.data)
           }else{
             this.serviceLoading.hide()
             this.message.description = response.message
@@ -403,13 +412,13 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
 
         },
         complete: () => {
-          const response = this.ltsUserRepresentantes();
+          /*const response = this.ltsUserRepresentantes();
           if (response && response.data) {
             response.data.forEach((representante: ResponseUsuario) => {
               representante.selected = false;
             });
           }
-          this.estudianteForm.reset()
+          this.estudianteForm.reset()*/
           this.serviceLoading.hide()
 
         },
@@ -442,8 +451,28 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
 
   }
 
+  clear(){
+
+    const response = this.ltsUserRepresentantes();
+    if (response && response.data) {
+      response.data.forEach((representante: ResponseUsuario) => {
+        representante.selected = false;
+      });
+    }
+
+
+    this.listSearchEstudiantes = []
+    this.estudianteForm.reset()
+    this.serviceEntity.setEntity(this.listSearchEstudiantes[0])
+
+  }
+
+
+
 
   buscar(){
+
+    this.clear()
 
     this.ref = this.dialogService.open(ModalBusquedaComponent, {
       header: 'BUSCAR ESTUDIANTE',
@@ -457,11 +486,20 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
       console.log("resullttt")
       console.log(result)
       if (result) {
+        let resultFound = false
         const response = this.ltsEstudiantes()
         if (response && response.data) {
           response.data.forEach((estudiante: EstudianteModel) => {
 
-            if(estudiante.id  == result){
+            if(estudiante.informacionPersonal?.identificacion.toString().toUpperCase() === result.toString().toUpperCase() || estudiante.id  == result){
+
+              const representanteEncontrado = this.ltsUserRepresentantes().data.find((reprsentante: ResponseUsuario) => reprsentante.id == estudiante.representanteId)
+              if(representanteEncontrado){
+                representanteEncontrado.selected = true
+                this.selectRepresentante = representanteEncontrado
+              }
+
+              
               const date = new Date(estudiante.informacionPersonal!.fechaNacimiento);
               const formattedDate = date.toISOString().split('T')[0];
               this.idEstudiante = estudiante.id ?? 0
@@ -478,9 +516,22 @@ export default class EstudianteComponent implements OnInit, OnDestroy {
                 celular: estudiante.informacionPersonal!.celular,
                 fechaNacimiento: formattedDate,
                 direccion: estudiante.informacionPersonal!.direccion, 
-              });              
+              });   
+              
+              resultFound = true
             }
           });
+          if(!resultFound){
+            this.serviceEntity.setEntity(this.listSearchEstudiantes[0])
+            this.message.description = "NO SE ENCONTRO EL ESTUDIANTE"
+            this.message.icon = "pi pi-info"
+            this.message.title = "ADVERTENCIA"
+            this.message.colorIcon = "blue"
+            this.message.colorTitle= "blue"
+            this.message.visible = true
+    
+          }
+
         }
     
 

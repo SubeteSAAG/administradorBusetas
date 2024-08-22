@@ -26,6 +26,7 @@ export interface ResponseUsuario {
     empresaId: number,
     usuarioId: number,
     informacionPersonal: InformacionPersonalModel
+    representanteId: number
     selected?: boolean;
 
 }

@@ -11,6 +11,7 @@ import { hoarioModel, RutaModel } from '@models/ruta';
 import { MessageModel } from '@models/message';
 import { ApiResponse } from '@models/api-response';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BarraMenuService } from '@services/barra-menu-service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export default class AsignacionesComponent implements OnInit{
   private readonly serviceBuseta = inject(BusetaService)
   private readonly serviceLoading = inject(LoadingService)
   private readonly serviceRuta = inject(RutaService)
+  private readonly serviceBarraMenu = inject(BarraMenuService)
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
   ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
@@ -51,6 +53,9 @@ export default class AsignacionesComponent implements OnInit{
   }
 
   ngOnInit(): void {
+
+    this.serviceBarraMenu.onPanelInformativo()
+
     this.serviceBuseta.getLtsBusetas()
     this.serviceRuta.getLtsRutaByEmpresa()
     this.serviceLoading.loading$.subscribe((isLoading) => {
@@ -227,7 +232,7 @@ export default class AsignacionesComponent implements OnInit{
 
   handleNextClick2(nextCallback: EventEmitter<any>, ruta: any) {
     console.log('Next button clicked');
-    this.serviceRuta.getLtsPasajerosByRutaBuseta(1)
+    this.serviceRuta.getLtsPasajerosByRutaBuseta(ruta.id)
     
     nextCallback.emit();
   }

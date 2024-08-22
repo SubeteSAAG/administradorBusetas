@@ -9,6 +9,7 @@ import { ApiResponse } from '@models/api-response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PasajeroService } from '@services/pasajero-service';
 import { PasajeroListaModel, PasajeroModel } from '@models/pasajero';
+import { BarraMenuService } from '@services/barra-menu-service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export default class GestionPasajeroComponent implements OnInit{
 
   private readonly serviceLoading = inject(LoadingService)
   private readonly servicePasajero = inject(PasajeroService)
+  private readonly serviceBarraMenu = inject(BarraMenuService)
 
 
   ltsPasajeros = this.servicePasajero.ltsPasajeros
@@ -40,6 +42,9 @@ export default class GestionPasajeroComponent implements OnInit{
   }
 
   ngOnInit(): void {
+
+    this.serviceBarraMenu.onPanelInformativo()
+
     this.servicePasajero.getLtsPasajeros()
     this.serviceLoading.loading$.subscribe((isLoading) => {
       this.enableLoading = isLoading;
@@ -82,7 +87,8 @@ export default class GestionPasajeroComponent implements OnInit{
   }
 
   openModal(pasajero: PasajeroListaModel){
-    
+
+    this.sidebarVisible = true
 
   }
 

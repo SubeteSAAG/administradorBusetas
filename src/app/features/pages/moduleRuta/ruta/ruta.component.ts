@@ -118,7 +118,7 @@ export default class RutaComponent implements OnInit{
       console.log(ruta.data)
       if (ruta && ruta.data && ruta.data.length > 0) {
         console.log('Buscando en la lista de busetas');
-        this.listSearchRouteEnterprise = ruta.data.filter((ruta: RutaModel) => ruta.name && ruta.name.toString().toUpperCase().includes(value));
+        this.listSearchRouteEnterprise = ruta.data.filter((ruta: RutaModel) => ruta.name.toString().toUpperCase() == value.toString().toUpperCase());
         console.log('Resultado de la búsqueda:', this.listSearchRouteEnterprise);
 
         if(this.listSearchRouteEnterprise.length == 1){
@@ -252,7 +252,7 @@ export default class RutaComponent implements OnInit{
   }
 
   getDia(horario: hoarioModel): number | undefined {
-    return horario.dia !== undefined ? horario.dia : horario.Dia;
+    return horario.dia !== undefined  ? horario.dia : horario.Dia;
   }
 
 
@@ -298,7 +298,6 @@ export default class RutaComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.listHorarios = []
             this.serviceRuta.getLtsRutaByEmpresa()
 
           }else{
@@ -313,8 +312,7 @@ export default class RutaComponent implements OnInit{
           }
         },
         complete: () =>{
-          this.routeForm.reset()
-          this.horarioForm.reset()
+          this.clear()
           this.serviceLoading.hide()
         },
         error: (error: HttpErrorResponse) => {
@@ -373,9 +371,8 @@ export default class RutaComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.listHorarios = []
             this.serviceRuta.getLtsRutaByEmpresa()
-
+            this.serviceEntity.setEntity(response.data)
           }else{
 
             this.message.description = response.message
@@ -388,8 +385,6 @@ export default class RutaComponent implements OnInit{
           }
         },
         complete: () =>{
-          this.routeForm.reset()
-          this.horarioForm.reset()
           this.serviceLoading.hide()
         },
         error: (error: HttpErrorResponse) => {
@@ -422,6 +417,8 @@ export default class RutaComponent implements OnInit{
 
   buscar(){
 
+    this.clear()
+    
     this.ref = this.dialogService.open(ModalBusquedaComponent, {
       header: 'BUSCAR RUTA',
       width: '30%',
@@ -434,31 +431,53 @@ export default class RutaComponent implements OnInit{
       console.log("resullttt")
       console.log(result)
       if (result) {
+        let resultFound = false
         const response = this.ltsRouteByEnterprise()
         if (response && response.data) {
           response.data.forEach((ruta: RutaModel) => {
-            if(ruta.name  == result){
+            if(ruta.name.toUpperCase()  == result.toUpperCase()){
               console.log("llelelalal")
+              console.log(ruta)
+
               this.idRoute = ruta.id ?? 0
               this.routeForm.patchValue({
                 name: ruta.name,
                 description: ruta.description,
               });   
-              if (typeof ruta.horario === 'string') {
-                this.listHorarios = JSON.parse(ruta.horario);
-                console.log("mmmmmmm")
-                console.log(this.listHorarios)
-                //this.listHorarios = horarioObject         
+              if(ruta.horario){
+                
+                if (typeof ruta.horario === 'string') {
+                  this.listHorarios = JSON.parse(ruta.horario);
+                }
+                
               }
+              
+              resultFound = true
 
             }
           });
+          if(!resultFound){
+            this.serviceEntity.setEntity(this.listSearchRouteEnterprise[0])
+            this.message.description = "NO SE ENCONTRO LA RUTA"
+            this.message.icon = "pi pi-info"
+            this.message.title = "ADVERTENCIA"
+            this.message.colorIcon = "blue"
+            this.message.colorTitle= "blue"
+            this.message.visible = true
+          }
         }
     
 
       }
     });
+  }
 
+  clear(){
+    this.listHorarios = []
+    this.listSearchRouteEnterprise = []
+    this.horarioForm.reset()
+    this.routeForm.reset()
+    this.serviceEntity.setEntity(this.listSearchRouteEnterprise[0])
 
   }
 

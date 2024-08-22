@@ -94,6 +94,8 @@ export default class BusetaComponent implements OnInit {
 
   ngOnInit() {
 
+    this.serviceBarraMenu.onPanelInformativo()
+
     
     this.guardarSubscription = this.serviceBarraMenu.getGuardarObservable().subscribe(() => {
       this.guardar();
@@ -449,6 +451,7 @@ export default class BusetaComponent implements OnInit {
             }
           });
           if(!resultFound){
+            this.serviceEntity.setEntity(this.listSearchBusetas[0])
             this.message.description = "NO SE ENCONTRO LA PLACA INGRESADA"
             this.message.icon = "pi pi-info"
             this.message.title = "ADVERTENCIA"

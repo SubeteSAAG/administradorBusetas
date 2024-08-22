@@ -13,7 +13,8 @@ export interface EstudianteModel{
     abordo?: string,
     esEstudiante?: boolean,
     direccionDomicilio?: string,
-    ubicacion?: ubicacion
+    ubicacion?: ubicacion | null
+    
 
 }
 

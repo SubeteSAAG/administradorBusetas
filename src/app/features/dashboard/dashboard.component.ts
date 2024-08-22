@@ -11,6 +11,8 @@ import { Usuario } from '@models/response-login';
 import { TokenService } from '@services/token-service';
 import { BusetaModel } from '@models/buseta';
 import { EntityService } from '@services/entity-service';
+import { Subscription } from 'rxjs';
+import { BarraMenuService } from '@services/barra-menu-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,9 +30,13 @@ import { EntityService } from '@services/entity-service';
 })
 export default class DashboardComponent implements OnInit {
   
+  private panelInformativoSubscription!: Subscription;
+
 
   private readonly serviceToken = inject(TokenService)
   private readonly serviceEntity = inject(EntityService)
+  private readonly serviceMenuBarra = inject(BarraMenuService)
+
   userLogged: Usuario | null = null;
   listSearchBusetas: BusetaModel[] = []
   vidibelComponents: boolean = true
@@ -243,6 +249,16 @@ export default class DashboardComponent implements OnInit {
       console.log('init appp..>>')
       this.userLogged = this.serviceToken.getDetailUser()
 
+    this.panelInformativoSubscription = this.serviceMenuBarra.getPanelInformativoObservable().subscribe(() => {
+      const valor = localStorage.getItem('visible');
+      if(valor == "true"){
+        this.vidibelComponents = true
+      }else{
+        this.vidibelComponents = false
+      }
+    });
+  
+
   }
 
   clearPanel(){
@@ -262,12 +278,16 @@ export default class DashboardComponent implements OnInit {
       console.log(path)
       console.log(path.split('/')[2])
       const index = this.ltsPathsIndependientes.findIndex(item => item.path === path.split('/')[2])
+      localStorage.setItem('path', path.split('/')[2]);
       console.log("indeccccxxxx")
       console.log(index)
       if(index != -1){
         this.vidibelComponents = false
+        localStorage.setItem('visible', 'false');
       }else{
         this.vidibelComponents = true
+        localStorage.setItem('visible', 'true');
+
       }
       this.route.navigate([path]);
       this.clearPanel()

@@ -97,6 +97,9 @@ export default class PasajeroComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+    this.serviceBarraMenu.onPanelInformativo()
+
     this.guardarSubscription = this.serviceBarraMenu.getGuardarObservable().subscribe(() => {
       this.guardar();
     });
@@ -118,7 +121,7 @@ export default class PasajeroComponent implements OnInit {
       const pasajero = this.ltsPasajeros();
       if (pasajero && pasajero.data && pasajero.data.length > 0) {
         console.log('Buscando en la lista de busetas');
-        this.listSearchPasajeros = pasajero.data.filter((pasajero: PasajeroModel) => pasajero.id && pasajero.id.toString().toUpperCase() === value.toUpperCase());
+        this.listSearchPasajeros = pasajero.data.filter((pasajero: PasajeroModel) => pasajero.id && pasajero.id.toString().toUpperCase() === value.toUpperCase() || pasajero.informacionPersonal.identificacion.toString().toUpperCase() === value.toUpperCase());
         console.log('Resultado de la búsqueda:', this.listSearchPasajeros);
 
         if(this.listSearchPasajeros.length == 1){
@@ -193,6 +196,8 @@ export default class PasajeroComponent implements OnInit {
 
   guardar(){
 
+    console.log("GUARDADADDADADA")
+
     let valida = this.validateForm();
     if(valida){
 
@@ -240,7 +245,7 @@ export default class PasajeroComponent implements OnInit {
           }
         },
         complete: () =>{
-          this.usuarioForm.reset()
+          this.clear()
           this.serviceLoading.hide()
         },
         error: (error: HttpErrorResponse) => {
@@ -272,6 +277,7 @@ export default class PasajeroComponent implements OnInit {
 
   editar(){
 
+    console.log("EDITATATATATATATA")
     let valida = this.validateForm();
     if(valida){
 
@@ -301,13 +307,14 @@ export default class PasajeroComponent implements OnInit {
           console.log("resssssss")
           console.log(response)
           if(response.statusCode == 200){
-            this.message.description = "PASAJERO CREADO!!!"
+            this.message.description = "PASAJERO ACTUALIZADO!!!"
             this.message.icon = "pi pi-user-plus"
             this.message.title = "ACTUALIZACIÓN DE PASAJEROS"
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-
+            this.servicePasajero.getLtsPasajeros()
+            this.serviceEntity.setEntity(response.data)
           }else{
 
             this.message.description = response.message
@@ -320,7 +327,6 @@ export default class PasajeroComponent implements OnInit {
           }
         },
         complete: () =>{
-          this.usuarioForm.reset()
           this.serviceLoading.hide()
         },
         error: (error: HttpErrorResponse) => {
@@ -347,11 +353,19 @@ export default class PasajeroComponent implements OnInit {
         }
       })
     }
+  }
 
+  clear(){
+    this.listSearchPasajeros = []
+    this.usuarioForm.reset()
+    this.serviceEntity.setEntity(this.listSearchPasajeros[0])
 
   }
 
+
   buscar(){
+
+    this.clear()
 
     this.ref = this.dialogService.open(ModalBusquedaComponent, {
       header: 'BUSCAR PASAJERO',
@@ -369,7 +383,7 @@ export default class PasajeroComponent implements OnInit {
         let resultFound = false
         if (response && response.data) {
           response.data.forEach((pasajero: PasajeroModel) => {
-            if(pasajero.id  == result){
+            if(pasajero.id  == result || pasajero.informacionPersonal.identificacion == result){
               console.log("llelelalal")
               const date = new Date(pasajero.informacionPersonal.fechaNacimiento);
               const formattedDate = date.toISOString().split('T')[0];

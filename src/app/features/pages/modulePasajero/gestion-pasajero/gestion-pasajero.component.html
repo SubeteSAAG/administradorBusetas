@@ -83,3 +83,20 @@
   </p-table>
 </div>
 }
+
+<p-sidebar [(visible)]="sidebarVisible" [fullScreen]="true">
+  <app-message
+    [title]="message.title"
+    [colorTitle]="message.colorTitle"
+    [description]="message.description"
+    [icon]="message.icon"
+    [colorIcon]="message.colorIcon"
+    [visible]="message.visible"
+    (closed)="handleMessageClosed()"
+  >
+  </app-message>
+
+  <div class="container-sidebar">
+    <h3>GESTIÓN DE BUSETA - RUTA</h3>
+  </div>
+</p-sidebar>
