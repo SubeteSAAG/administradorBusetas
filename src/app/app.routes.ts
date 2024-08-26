@@ -59,7 +59,11 @@ export const routes: Routes = [
                 title: 'Gestión de Pasajeros',
                 loadComponent: () => import('@features/pages/modulePasajero/gestion-pasajero/gestion-pasajero.component')
             },
-
+            {
+                path: 'gestion-usuario',
+                title: 'Gestión de Usuarios',
+                loadComponent: () => import('@features/pages/moduleUsuario/gestion-usuarios/gestion-usuarios.component')
+            },
             {
                 path: '',
                 redirectTo: '/dashboard/usuario',

@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 
 enum EntityType {
   Buseta = 'Buseta',
-  Persona = 'Persona'
+  Persona = 'Persona',
+  Empresa = 'Empresa'
 }
 
 
@@ -44,6 +45,8 @@ export class InformacionPersonaComponent implements OnInit{
       return EntityType.Buseta;
     }else if(entity && 'informacionPersonal' in entity){
       return EntityType.Persona;
+    }else if(entity && 'ruc' in entity){
+      return EntityType.Empresa;
     } 
     return EntityType.Buseta; // Ajusta el valor predeterminado según tus necesidades
   }

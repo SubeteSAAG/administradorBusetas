@@ -12,6 +12,8 @@ import { MessageModel } from '@models/message';
 import { ApiResponse } from '@models/api-response';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BarraMenuService } from '@services/barra-menu-service';
+import { EmpresaService } from '@services/empresa-service';
+import { EmpresaModel } from '@models/empresa';
 
 
 @Component({
@@ -33,17 +35,22 @@ export default class AsignacionesComponent implements OnInit{
   private readonly serviceLoading = inject(LoadingService)
   private readonly serviceRuta = inject(RutaService)
   private readonly serviceBarraMenu = inject(BarraMenuService)
+  private readonly serviceEmpresa = inject(EmpresaService)
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
   ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
   ltsRutasByBuseta = this.serviceRuta.ltsRutasByBuseta
   ltsPasajerosByRutaBuseta = this.serviceRuta.ltsPasajerosByRutaBuseta
+  ltsEmpresas = this.serviceEmpresa.ltsEmpresas
+
   selectRuta!: RutaModel
   enableLoading = false
   sidebarVisible = false
   message!: MessageModel
   busetaId: number = 0
   rutaId:  number = 0  
+  empresaId: number = 0
+  sidebarVisibleEmpresa: boolean = false
 
   @ViewChild('stepperPanel') stepperPanel: any;
 
@@ -58,6 +65,8 @@ export default class AsignacionesComponent implements OnInit{
 
     this.serviceBuseta.getLtsBusetas()
     this.serviceRuta.getLtsRutaByEmpresa()
+
+
     this.serviceLoading.loading$.subscribe((isLoading) => {
       this.enableLoading = isLoading;
     });
@@ -105,7 +114,11 @@ export default class AsignacionesComponent implements OnInit{
   }
 
   recargarRutas(){
+    this.serviceRuta.getLtsRutaByEmpresa()
+  }
 
+  recargarEmpresa(){
+    this.serviceEmpresa.getLtsEmpresas()
   }
 
   getRutaSelected(rutaOption: RutaModel){
@@ -119,6 +132,10 @@ export default class AsignacionesComponent implements OnInit{
       });
     }
 
+
+  }
+  
+  getEmpresaSelected(empresa: EmpresaModel){
 
   }
 
@@ -222,6 +239,10 @@ export default class AsignacionesComponent implements OnInit{
     this.sidebarVisible = true
   }
 
+  openModalEmpresa(buseta: BusetaModel){
+    this.sidebarVisibleEmpresa = true
+  }
+
   handleNextClick(nextCallback: EventEmitter<any>, buseta: BusetaModel) {
     console.log('Next button clicked');
     console.log(buseta.id)
@@ -235,6 +256,10 @@ export default class AsignacionesComponent implements OnInit{
     this.serviceRuta.getLtsPasajerosByRutaBuseta(ruta.id)
     
     nextCallback.emit();
+  }
+
+  agregarEmpresa(){
+
   }
 
 

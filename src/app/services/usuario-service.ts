@@ -37,15 +37,29 @@ export class UsuarioService{
 
     }
 
-
     public saveUsuarioConductor(usuario: UsuarioModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/CrearUsuarioConductor`, usuario);
     }
 
-
-    
     public saveUsuarioRepresentante(usuario: UsuarioModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/CrearUsuarioRepresentante`, usuario);
     }
+
+    public editUsuarioRepresentante(usuario: UsuarioModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/ActualizarUsuarioRepresentante`, usuario);
+    }
+
+    public editUsuarioConductor(usuario: UsuarioModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/ActualizarUsuarioConductor`, usuario);
+    }
+
+    public activarUsuario(usuarioId: number): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/activarUsuario/${usuarioId}`, {});
+    }
+
+    public inactivarUsuario(usuarioId: number): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/inactivarUsuario/${usuarioId}`, {});
+    }
+
 
 }

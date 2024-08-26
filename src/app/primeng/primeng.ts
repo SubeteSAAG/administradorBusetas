@@ -27,6 +27,10 @@ import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
 import { SidebarModule } from 'primeng/sidebar';
 import { StepperModule } from 'primeng/stepper';
+import { TabViewModule } from 'primeng/tabview';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DockModule } from 'primeng/dock';
+
 
 export const PRIMENG_MODULES = [
     ButtonModule,
@@ -57,6 +61,9 @@ export const PRIMENG_MODULES = [
     IconFieldModule,
     InputIconModule,
     SidebarModule,
-    StepperModule
+    StepperModule,
+    TabViewModule,
+    ConfirmDialogModule,
+    DockModule
 
   ];

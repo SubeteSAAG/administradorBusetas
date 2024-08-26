@@ -1,6 +1,7 @@
 import { InformacionPersonalModel } from "./informacion-personal"
 
 export interface UsuarioModel{
+    id?: number
     usuario: UserModel,
     informacionPersonal: InformacionPersonalModel
     urlImagenMatricula?: string,
@@ -13,8 +14,10 @@ export interface UserModel{
     name: string,
     userName: string,
     email: string,
-    password: string,
+    password?: string,
     tipo: number
+    empresaId?: number
+    isActive?: boolean
 }
 
 

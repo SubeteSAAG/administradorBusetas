@@ -5,8 +5,9 @@ import { UsuarioModel } from '@models/usuario'
 import { PasajeroModel } from '@models/pasajero';
 import { EstudianteModel } from '@models/estudiante';
 import { RutaModel } from '@models/ruta';
+import { EmpresaModel } from '@models/empresa';
 
-type Entity = BusetaModel | UsuarioModel | PasajeroModel | EstudianteModel | RutaModel ; 
+type Entity = BusetaModel | UsuarioModel | PasajeroModel | EstudianteModel | RutaModel | EmpresaModel ; 
 
 @Injectable({
   providedIn: 'root'

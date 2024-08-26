@@ -144,6 +144,25 @@
       {{ entity.description }}
     </div>
   </div>
+  } @case ("Empresa"){
+  <div style="padding: 0.5rem">
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Ruc:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.ruc }}
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Nombre:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.nombre }}
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.descripcion }}
+    </div>
+  </div>
+
   } } } @else{
   <h5 style="text-align: center">NO TIENE INFORMACIÓN SELECCIONADA</h5>
   }

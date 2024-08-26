@@ -20,10 +20,12 @@ export class BarraMenuComponent {
 
   items: MenuItem[] | undefined;
 
+  position: 'bottom' | 'top' | 'left' | 'right' = 'top';
+
   constructor(private serviceBarraMenu: BarraMenuService) {}
 
   ngOnInit() {
-    this.items = [
+    /*this.items = [
       {
         label: 'Guardar',
         icon: 'pi pi-save'
@@ -35,6 +37,20 @@ export class BarraMenuComponent {
       {
         label: 'Buscar',
         icon: 'pi pi-search',
+      }
+    ];*/
+    this.items = [
+      {
+          label: 'Guardar',
+          icon: 'assets/logo/Buseta.png'
+      },
+      {
+          label: 'Editar',
+          icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg'
+      },
+      {
+          label: 'Buscar',
+          icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg'
       }
     ];
   }

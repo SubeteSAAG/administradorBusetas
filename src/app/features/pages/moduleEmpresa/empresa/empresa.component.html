@@ -1,1 +1,70 @@
-<p>empresa works!</p>
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<div style="font-size: 1rem; font-weight: 700; margin-bottom: 10px">
+  <p>{{ titulo }}</p>
+</div>
+
+<div class="container">
+  <form
+    [formGroup]="empresaForm"
+    class="form-container"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        class="custom-input"
+        placeholder="Nombre"
+        formControlName="nombre"
+        appUppercase
+      />
+      @if(empresaForm.get('nombre')?.hasError('required') &&
+      empresaForm.get('nombre')?.touched){
+      <div class="form-error" style="color: red">Nombre requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <input
+        id="descripcion"
+        type="text"
+        class="custom-input"
+        placeholder="Descripción"
+        formControlName="descripcion"
+      />
+      @if(empresaForm.get('descripcion')?.hasError('required') &&
+      empresaForm.get('descripcion')?.touched){
+      <div class="form-error" style="color: red">Descripción requerido</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="ruc" class="form-label">Ruc</label>
+      <input
+        id="ruc"
+        type="text"
+        class="custom-input"
+        placeholder="Ruc"
+        formControlName="ruc"
+      />
+      @if(empresaForm.get('ruc')?.hasError('required') &&
+      empresaForm.get('ruc')?.touched){
+      <div class="form-error" style="color: red">Ruc requerido</div>
+      }
+    </div>
+  </form>
+</div>

@@ -48,33 +48,17 @@ export default class DashboardComponent implements OnInit {
     {
       id_menu: 2,
       path: 'gestion-pasajero'
+    },
+    {
+      id_menu: 2,
+      path: 'gestion-usuario'
     }
   ]
 
 
   ltsMenus: Menu[] = [
-    
     {
       id_menu: 1,
-      nombre: 'Usuarios',
-      icono: 'pi pi-user',
-      estado: true,
-      path: '',
-      isOpen: false,
-      submenus: [
-        {
-          id_menu: 1,
-          nombre: 'Mantenimiento',
-          icono: 'pi pi-comments',
-          estado: true,
-          path: '/dashboard/usuario',
-          isOpen: false,
-          submenus: []
-        }
-      ]
-    },
-    /*{
-      id_menu: 2,
       nombre: 'Empresas',
       icono: 'pi pi-warehouse',
       estado: true,
@@ -91,7 +75,37 @@ export default class DashboardComponent implements OnInit {
           submenus: []
         }
       ]
-    },*/
+    },
+    {
+      id_menu: 2,
+      nombre: 'Usuarios',
+      icono: 'pi pi-user',
+      estado: true,
+      path: '',
+      isOpen: false,
+      submenus: [
+        {
+          id_menu: 1,
+          nombre: 'Mantenimiento',
+          icono: 'pi pi-comments',
+          estado: true,
+          path: '/dashboard/usuario',
+          isOpen: false,
+          submenus: []
+        },
+        {
+          id_menu: 2,
+          nombre: 'Gestión de Usuarios',
+          icono: 'pi pi-user',
+          estado: true,
+          path: '/dashboard/gestion-usuario',
+          isOpen: false,
+          submenus: []
+
+        }
+
+      ]
+    },
     /*{
       id_menu: 3,
       nombre: 'Conductor',
@@ -113,7 +127,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },*/
     {
-      id_menu: 4,
+      id_menu: 3,
       nombre: 'Busetas',
       icono: 'pi pi-car',
       estado: true,
@@ -142,7 +156,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 5,
+      id_menu: 4,
       nombre: 'Estudiante',
       icono: 'pi pi-user',
       estado: true,
@@ -162,7 +176,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 6,
+      id_menu: 5,
       nombre: 'Pasajero',
       icono: 'pi pi-user',
       estado: true,
@@ -192,7 +206,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 7,
+      id_menu: 6,
       nombre: 'Rutas',
       icono: 'pi pi-map',
       estado: true,
@@ -212,7 +226,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 8,
+      id_menu: 7,
       nombre: 'Recorridos',
       icono: 'pi pi-map-marker',
       estado: true,

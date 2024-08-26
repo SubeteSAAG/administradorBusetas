@@ -14,6 +14,10 @@ import { UserModel, UsuarioModel } from '@models/usuario';
 import { ApiResponse } from '@models/api-response';
 import { MessageComponent } from '@shared/message/message.component'
 import { MessageModel } from '@models/message';
+import { SearchService } from '@services/search-service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.component'
+
 
 
 @Component({
@@ -24,7 +28,8 @@ import { MessageModel } from '@models/message';
     ReactiveFormsModule,
     LoadingComponent,
     PRIMENG_MODULES,
-    MessageComponent
+    MessageComponent,
+    ModalBusquedaComponent
   ],
   providers: [MessageService],
   templateUrl: './usuario.component.html',
@@ -40,12 +45,18 @@ export default class UsuarioComponent {
 
   private guardarSubscription!: Subscription;
   private editarSubscription!: Subscription;
+  private buscarSubscription!: Subscription;
+  private searchSubscription!: Subscription;
+
 
   usuarioForm!: FormGroup
 
   private readonly serviceLoading = inject(LoadingService)
   private readonly serviceUsuario = inject(UsuarioService)
   private readonly serviceEntity = inject(EntityService)
+  private readonly serviceSearch = inject(SearchService)
+  private readonly dialogService = inject(DialogService)
+
 
   /*user: UsuarioModel = {
     email: "cris",
@@ -72,6 +83,7 @@ export default class UsuarioComponent {
   selectUser: number = 1;
   
   ltsUserConducotres = this.serviceUsuario.ltsUsuariosConducotres
+  ltsUsuariosRepresentantes = this.serviceUsuario.ltsUsuariosRepresentantes
 
   ltsImages: any[] = [
     { id_image: 1, nombre: "Imagen 1", url: "https://www.primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" },
@@ -92,6 +104,12 @@ export default class UsuarioComponent {
   selectDocumento = this.ltsTpoDocumento[0]
   estadoSubido: boolean = false
   message!: MessageModel
+
+  listSearchUsuario: UsuarioModel[] = []
+  ref!: DynamicDialogRef;
+  idUsuario: number = 0
+
+
 
   constructor(
     private serviceBarraMenu: BarraMenuService,
@@ -128,9 +146,17 @@ export default class UsuarioComponent {
     };
 
   
+    this.serviceUsuario.getLtsUsuariosConducotres()
+    this.serviceUsuario.getLtsUsuariosRepresentantes()
   }
 
   ngOnInit() {
+
+    this.serviceLoading.loading$.subscribe((isLoading) => {
+      this.enableLoading = isLoading;
+    });
+
+
     this.guardarSubscription = this.serviceBarraMenu.getGuardarObservable().subscribe(() => {
       this.guardar();
     });
@@ -139,7 +165,45 @@ export default class UsuarioComponent {
       this.editar();
     });
 
+    this.buscarSubscription = this.serviceBarraMenu.getBuscarObservable().subscribe(() => {
+      this.buscar();
+    });    
+
+
     console.log("mando info")
+
+    this.searchSubscription = this.serviceSearch.getSearchValueObservable().subscribe((value: any) => {
+      console.log("llegagaga busqueueu")
+      console.log(value)
+
+      if(this.selectUser == 1){
+        const usuario = this.ltsUserConducotres();
+        if (usuario && usuario.data && usuario.data.length > 0) {
+          this.listSearchUsuario = usuario.data.filter((usuario: UsuarioModel) => usuario.informacionPersonal.identificacion.toString().toUpperCase() === value.toUpperCase() || usuario.id?.toString().toUpperCase() === (value.toUpperCase())) ;
+          console.log('Resultado de la búsqueda:', this.listSearchUsuario);
+          if(this.listSearchUsuario.length == 1){
+            this.serviceEntity.setEntity(this.listSearchUsuario[0])
+          }
+        }
+  
+      }else{
+
+        const usuario = this.ltsUsuariosRepresentantes();
+        if (usuario && usuario.data && usuario.data.length > 0) {
+          this.listSearchUsuario = usuario.data.filter((usuario: UsuarioModel) => usuario.informacionPersonal.identificacion.toString().toUpperCase() === value.toUpperCase() || usuario.id?.toString().toUpperCase() === (value.toUpperCase())) ;
+          console.log('Resultado de la búsqueda:', this.listSearchUsuario);
+          if(this.listSearchUsuario.length == 1){
+            this.serviceEntity.setEntity(this.listSearchUsuario[0])
+          }
+        }
+
+      }
+
+
+    });
+
+
+
     //this.serviceEntity.setEntity(this.user)
 
     /*this.responsiveOptions = [
@@ -169,6 +233,13 @@ export default class UsuarioComponent {
     if(this.editarSubscription){
       this.editarSubscription.unsubscribe();
     }
+    if(this.buscarSubscription){
+      this.buscarSubscription.unsubscribe();
+    }
+    if(this.searchSubscription){
+      this.searchSubscription.unsubscribe();
+    }
+
   }
 
   onSubmit(){
@@ -353,8 +424,6 @@ export default class UsuarioComponent {
         informacionPersonal: informacion,
       } 
 
-
-
       if(this.selectUser == 1){
 
         const usuario: UsuarioModel = {
@@ -364,7 +433,6 @@ export default class UsuarioComponent {
           urlImagenLicencia: ""
 
         } 
-
 
         this.serviceUsuario.saveUsuarioConductor(usuario).subscribe({
           next: (response: ApiResponse) =>{
@@ -390,7 +458,7 @@ export default class UsuarioComponent {
             }
           },
           complete: () =>{
-            this.usuarioForm.reset()
+            this.clearComponent()
             this.serviceLoading.hide()
           },
           error: (error) =>{
@@ -432,7 +500,7 @@ export default class UsuarioComponent {
             }
           },
           complete: () =>{
-            this.usuarioForm.reset()
+            this.clearComponent()
             this.serviceLoading.hide()
 
           },
@@ -457,9 +525,116 @@ export default class UsuarioComponent {
   }
 
   private editar() {
+
+
+
+
   }
 
-  buscar(data: { tipo: string, valor: string }) {
+  buscar() {
+
+    this.clearComponent()
+
+    this.ref = this.dialogService.open(ModalBusquedaComponent, {
+      header: 'BUSCAR USUARIO',
+      width: '30%',
+      data: {
+        visible: true,
+         content: '<p>Cédula: </p>'
+      }
+    });
+
+    this.ref.onClose.subscribe((result: any) => {
+      console.log("cerarar")
+      console.log(result)
+      if (result) {
+        console.log("accion el cerrar")
+        let resultFound = false
+
+
+        if(this.selectUser == 1){
+
+          const response = this.ltsUserConducotres()
+          if (response && response.data) {
+            response.data.forEach((usuario: UsuarioModel) => {
+              if(usuario.informacionPersonal.identificacion.toUpperCase() === result.toUpperCase() || usuario.id == result){
+                console.log("llelelalal")
+  
+                this.idUsuario = usuario.id || 0
+                const date = new Date(usuario.informacionPersonal!.fechaNacimiento);
+                const formattedDate = date.toISOString().split('T')[0];
+  
+
+                this.usuarioForm.patchValue({
+                  nombres: usuario.informacionPersonal.nombres,
+                  apellidos: usuario.informacionPersonal.apellidos,
+                  sobreNombre: usuario.informacionPersonal.sobreNombre,
+                  tipoIdentificacion: usuario.informacionPersonal.tipoIdentificacion,
+                  identificacion: usuario.informacionPersonal.identificacion,
+                  telefono: usuario.informacionPersonal.telefono,
+                  celular: usuario.informacionPersonal.celular,
+                  fechaNacimiento: formattedDate,
+                  direccion: usuario.informacionPersonal.direccion
+                }); 
+                    
+                resultFound = true
+              }
+            });
+
+          }
+  
+          
+        }else{
+          const response = this.ltsUsuariosRepresentantes()
+          if (response && response.data) {
+            response.data.forEach((usuario: UsuarioModel) => {
+              if(usuario.informacionPersonal.identificacion.toUpperCase() === result.toUpperCase() || usuario.id == result){
+                console.log("llelelalal")
+  
+                this.idUsuario = usuario.id || 0
+                const date = new Date(usuario.informacionPersonal!.fechaNacimiento);
+                const formattedDate = date.toISOString().split('T')[0];
+
+                this.usuarioForm.patchValue({
+                  nombres: usuario.informacionPersonal.nombres,
+                  apellidos: usuario.informacionPersonal.apellidos,
+                  sobreNombre: usuario.informacionPersonal.sobreNombre,
+                  tipoIdentificacion: usuario.informacionPersonal.tipoIdentificacion,
+                  identificacion: usuario.informacionPersonal.identificacion,
+                  telefono: usuario.informacionPersonal.telefono,
+                  celular: usuario.informacionPersonal.celular,
+                  fechaNacimiento: formattedDate,
+                  direccion: usuario.informacionPersonal.direccion
+
+                }); 
+                    
+                resultFound = true
+              }
+            });
+          }
+  
+        }
+        if(!resultFound){
+          this.serviceEntity.setEntity(this.listSearchUsuario[0])
+          this.message.description = "NO SE ENCONTRO EL USUARIO INGRESAD0"
+          this.message.icon = "pi pi-info"
+          this.message.title = "ADVERTENCIA"
+          this.message.colorIcon = "blue"
+          this.message.colorTitle= "blue"
+          this.message.visible = true
+  
+        }
+      }
+    });
+
+
+  }
+
+
+  clearComponent(){
+    this.listSearchUsuario = []
+    this.usuarioForm.reset()
+    this.serviceEntity.setEntity(this.listSearchUsuario[0])
 
   }
 

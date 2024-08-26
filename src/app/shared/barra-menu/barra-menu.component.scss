@@ -14,3 +14,20 @@
 
     
 }
+
+
+.dock-window {
+    width: 100%;
+    position: relative;
+    height: 100px;
+    display: flex;
+    justify-content: flex-end;
+    text-align: end;
+    background-color: rgb(234, 234, 234);
+}
+
+.p-dock {
+    position: absolute;
+    z-index: 1000;
+    width: auto;
+}

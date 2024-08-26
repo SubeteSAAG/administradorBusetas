@@ -5,8 +5,6 @@ import { LoadingService } from '@services/loading-service';
 import { LoadingComponent } from '@shared/loading/loading.component'
 import { MessageComponent } from '@shared/message/message.component'
 import { MessageModel } from '@models/message';
-import { ApiResponse } from '@models/api-response';
-import { HttpErrorResponse } from '@angular/common/http';
 import { PasajeroService } from '@services/pasajero-service';
 import { PasajeroListaModel, PasajeroModel } from '@models/pasajero';
 import { BarraMenuService } from '@services/barra-menu-service';
