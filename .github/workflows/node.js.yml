@@ -3,7 +3,7 @@ name: Build and Deploy Angular App to EC2
 on:
   push:
     branches:
-      - main  # Adjust to your branch name
+      - cicd  # Adjust to your branch name
 
 jobs:
   build:
