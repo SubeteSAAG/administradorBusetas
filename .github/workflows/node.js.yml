@@ -37,7 +37,7 @@ jobs:
         echo "${{ secrets.AWS_SSH_KEY }}" > ec2-key.pem
         chmod 600 ec2-key.pem
         
-        ssh -o StrictHostKeyChecking=no -i private_key ec2-user@${{ secrets.AWS_EC2_HOST }}  'mkdir -p ~/.deploy/bustaapp/temps'
+        ssh -o StrictHostKeyChecking=no -i ec2-key.pem ec2-user@${{ secrets.AWS_EC2_HOST }}  'mkdir -p ~/.deploy/bustaapp/temps'
         # Copy the build files to the Docker directory on EC2
         scp -o StrictHostKeyChecking=no -i ec2-key.pem -r dist/gestion-transporte/browser/* ec2-user@${{ secrets.AWS_EC2_HOST }}:~/.deploy/bustaapp/temps
         
