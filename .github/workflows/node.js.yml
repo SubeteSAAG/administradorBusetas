@@ -29,7 +29,7 @@ jobs:
 
     - name: Copy files to EC2
       env:
-        AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}  # Set this in your repo secrets
+        AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}  # Set this in your repo secrets 
         AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}    # Set this in your repo secrets
         DOCKER_DIRECTORY: ~/.deploy/bustaapp/nginx
       run: |
@@ -42,7 +42,7 @@ jobs:
         scp -o StrictHostKeyChecking=no -i ec2-key.pem -r dist/gestion-transporte/browser/* ec2-user@${{ secrets.AWS_EC2_HOST }}:~/.deploy/bustaapp/temps
         
         # Move files to the target directory with sudo
-        ssh -o StrictHostKeyChecking=no -i ec2-key.pem ec2-user@${{ secrets.AWS_EC2_HOST }} "sudo mv ~/.deploy/bustaapp/temps/* ~/.deploy/bustaapp/nginx/app && rm -rf ~/.deploy/bustaapp/temps"
+        ssh -o StrictHostKeyChecking=no -i ec2-key.pem ec2-user@${{ secrets.AWS_EC2_HOST }} "sudo mv -f ~/.deploy/bustaapp/temps/* ~/.deploy/bustaapp/nginx/app && rm -rf ~/.deploy/bustaapp/temps"
     
         # Optional: SSH into the EC2 instance to restart the Docker container
         #ssh -i ec2-key.pem ubuntu@$AWS_EC2_HOST "cd $DOCKER_DIRECTORY && docker-compose down && docker-compose up -d"
