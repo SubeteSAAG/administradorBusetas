@@ -38,7 +38,7 @@ jobs:
         chmod 600 ec2-key.pem
         
         # Copy the build files to the Docker directory on EC2
-        scp -o StrictHostKeyChecking=no -i ec2-key.pem -r dist/gestion-transporte/browser/* ec2-user@${{ secrets.AWS_EC2_HOST }}:~/.deploy/bustaapp/nginx/app
+        scp -o StrictHostKeyChecking=no -i ec2-key.pem -r dist/gestion-transporte/browser/* githubActionsUser@${{ secrets.AWS_EC2_HOST }}:~/.deploy/bustaapp/nginx/app
         
         # Optional: SSH into the EC2 instance to restart the Docker container
         #ssh -i ec2-key.pem ubuntu@$AWS_EC2_HOST "cd $DOCKER_DIRECTORY && docker-compose down && docker-compose up -d"
