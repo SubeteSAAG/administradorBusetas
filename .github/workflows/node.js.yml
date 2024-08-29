@@ -1,0 +1,44 @@
+name: Build and Deploy Angular App to EC2
+
+on:
+  push:
+    branches:
+      - main  # Adjust to your branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # Specify your Node.js version
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build Angular app
+      run: npm run build --prod
+
+    - name: Install SSH client
+      run: sudo apt-get install -y openssh-client
+
+    - name: Copy files to EC2
+      env:
+        AWS_EC2_HOST: ${{ secrets.AWS_EC2_HOST }}  # Set this in your repo secrets
+        AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}    # Set this in your repo secrets
+        DOCKER_DIRECTORY: ~/.deploy/bustaapp/nginx
+      run: |
+        # Save the SSH private key to a file and secure it
+        echo "$AWS_SSH_KEY" > ec2-key.pem
+        chmod 600 ec2-key.pem
+        
+        # Copy the build files to the Docker directory on EC2
+        scp -i ec2-key.pem -r dist/your-angular-app/* ubuntu@$AWS_EC2_HOST:$DOCKER_DIRECTORY
+        
+        # Optional: SSH into the EC2 instance to restart the Docker container
+        #ssh -i ec2-key.pem ubuntu@$AWS_EC2_HOST "cd $DOCKER_DIRECTORY && docker-compose down && docker-compose up -d"
