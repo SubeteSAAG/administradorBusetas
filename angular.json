@@ -17,8 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "baseHref": "/app/",
-            "deployUrl": "/app/",
             "outputPath": "dist/gestion-transporte",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -57,7 +55,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "50MB"
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
