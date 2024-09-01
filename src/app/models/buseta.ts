@@ -21,3 +21,8 @@ export interface AsignarBusetaRutaModel {
     busetaId: number,
     rutaId: number
 }
+
+export interface AsignarBusetaEmpresaModel {
+    busetaId: number,
+    empresaId: number
+}

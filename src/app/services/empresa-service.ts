@@ -19,7 +19,7 @@ export class EmpresaService{
 
 
     public getLtsEmpresas(){
-        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/listar`)
+        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/Listar`)
         .pipe(tap((response: ApiResponse) => this.ltsEmpresas.set(response)))
         .subscribe()
 

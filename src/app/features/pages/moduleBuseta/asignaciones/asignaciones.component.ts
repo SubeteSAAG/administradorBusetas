@@ -1,6 +1,6 @@
 import { Component, effect, EventEmitter, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsignarBusetaRutaModel, BusetaModel } from '@models/buseta';
+import { AsignarBusetaEmpresaModel, AsignarBusetaRutaModel, BusetaModel } from '@models/buseta';
 import { BusetaService } from '@services/buseta-service';
 import { PRIMENG_MODULES } from '../../../../primeng/primeng';
 import { LoadingService } from '@services/loading-service';
@@ -14,6 +14,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BarraMenuService } from '@services/barra-menu-service';
 import { EmpresaService } from '@services/empresa-service';
 import { EmpresaModel } from '@models/empresa';
+import { TokenService } from '@services/token-service';
+import { Usuario } from '@models/response-login';
 
 
 @Component({
@@ -36,6 +38,8 @@ export default class AsignacionesComponent implements OnInit{
   private readonly serviceRuta = inject(RutaService)
   private readonly serviceBarraMenu = inject(BarraMenuService)
   private readonly serviceEmpresa = inject(EmpresaService)
+  private readonly serviceToken = inject(TokenService)
+
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
   ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
@@ -44,6 +48,7 @@ export default class AsignacionesComponent implements OnInit{
   ltsEmpresas = this.serviceEmpresa.ltsEmpresas
 
   selectRuta!: RutaModel
+  selectEmpresa!: EmpresaModel
   enableLoading = false
   sidebarVisible = false
   message!: MessageModel
@@ -51,6 +56,9 @@ export default class AsignacionesComponent implements OnInit{
   rutaId:  number = 0  
   empresaId: number = 0
   sidebarVisibleEmpresa: boolean = false
+  userLogged: Usuario | null = null;
+
+
 
   @ViewChild('stepperPanel') stepperPanel: any;
 
@@ -60,12 +68,11 @@ export default class AsignacionesComponent implements OnInit{
   }
 
   ngOnInit(): void {
-
+    this.userLogged = this.serviceToken.getDetailUser()
     this.serviceBarraMenu.onPanelInformativo()
-
     this.serviceBuseta.getLtsBusetas()
-    this.serviceRuta.getLtsRutaByEmpresa()
-
+    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+    this.serviceEmpresa.getLtsEmpresas()
 
     this.serviceLoading.loading$.subscribe((isLoading) => {
       this.enableLoading = isLoading;
@@ -114,7 +121,7 @@ export default class AsignacionesComponent implements OnInit{
   }
 
   recargarRutas(){
-    this.serviceRuta.getLtsRutaByEmpresa()
+    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
   }
 
   recargarEmpresa(){
@@ -135,8 +142,15 @@ export default class AsignacionesComponent implements OnInit{
 
   }
   
-  getEmpresaSelected(empresa: EmpresaModel){
+  getEmpresaSelected(empresaOption: EmpresaModel){
 
+    this.selectEmpresa = empresaOption
+    const response = this.ltsEmpresas();
+    if (response && response.data) {
+      response.data.forEach((empresa: EmpresaModel) => {
+        empresa.selected = empresa === empresaOption;
+      });
+    }
   }
 
   getHorario(horarios: string): string | undefined {
@@ -178,7 +192,7 @@ export default class AsignacionesComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa()
+            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
             this.sidebarVisible = false
           }else{
             this.serviceLoading.hide()
@@ -253,13 +267,83 @@ export default class AsignacionesComponent implements OnInit{
 
   handleNextClick2(nextCallback: EventEmitter<any>, ruta: any) {
     console.log('Next button clicked');
-    this.serviceRuta.getLtsPasajerosByRutaBuseta(ruta.id)
+    this.serviceRuta.getLtsPasajerosByRutaBuseta(ruta.ruta.id)
     
     nextCallback.emit();
   }
 
   agregarEmpresa(){
 
+    if(this.selectEmpresa){
+
+      this.serviceLoading.show()
+      const asignarEmpresa: AsignarBusetaEmpresaModel = {
+        busetaId: this.busetaId,
+        empresaId: this.selectEmpresa.id ?? 0
+      } 
+
+
+      this.serviceBuseta.asignarBusetaEmpresa(asignarEmpresa).subscribe({
+        next: (response: ApiResponse) =>{
+          if(response.statusCode == 200){
+            this.message.description = "EMPRESA ASIGNADA CORRECTAMENTE"
+            this.message.icon = "pi pi-car"
+            this.message.title = "ASIGNACIÓN DE EMPRESA"
+            this.message.colorIcon = "green"
+            this.message.colorTitle= "green"
+            this.message.visible = true
+            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.sidebarVisible = false
+          }else{
+            this.serviceLoading.hide()
+            this.message.description = response.message
+            this.message.icon = "pi pi-times"
+            this.message.title = "ERROR AL PROCESAR SOLICITUD"
+            this.message.colorIcon = "red"
+            this.message.colorTitle= "red"
+            this.message.visible = true
+
+          }
+        },
+        complete: () =>{
+          this.serviceLoading.hide()
+
+        },
+        error: (error: HttpErrorResponse) => {
+          this.serviceLoading.hide();
+          let apiResponse: ApiResponse;
+          try {
+            apiResponse = error.error as ApiResponse; 
+          } catch (e) {
+            apiResponse = {
+              success: false,
+              statusCode: error.status,
+              data: null,
+              message: error.message,
+              error: error.statusText
+            };
+          }
+      
+          this.message.description = apiResponse.message;
+          this.message.icon = "pi pi-times";
+          this.message.title = "ASIGNACIÓN DE EMPRESA";
+          this.message.colorIcon = "red";
+          this.message.colorTitle = "red";
+          this.message.visible = true;
+        }
+      })
+
+
+
+    }else{
+      this.message.description = "TIENE QUE SELECCIONAR UNA EMPRESA"
+      this.message.icon = "pi pi-info"
+      this.message.title = "ADVERTENCIA"
+      this.message.colorIcon = "blue"
+      this.message.colorTitle= "blue"
+      this.message.visible = true
+
+    }
   }
 
 

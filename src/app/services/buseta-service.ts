@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject, signal } from "@angular/core";
 import { environment } from "@envs/environment";
 import { ApiResponse } from "@models/api-response";
-import { AsignarBusetaRutaModel, BusetaModel } from "@models/buseta";
+import { AsignarBusetaEmpresaModel, AsignarBusetaRutaModel, BusetaModel } from "@models/buseta";
 import { Observable, tap } from "rxjs";
 
 @Injectable({
@@ -38,6 +38,10 @@ export class BusetaService{
 
     public asignarBusetaRuta(asignar: AsignarBusetaRutaModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/AsignarBusetaRuta`, asignar);
+    }
+
+    public asignarBusetaEmpresa(asignarEmpresa: AsignarBusetaEmpresaModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/AsignarBusetaEmpresa`, asignarEmpresa);
     }
 
     
