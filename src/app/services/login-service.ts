@@ -26,7 +26,10 @@ export class LoginService {
             password
         }).pipe(
             tap(response => {
+                console.log(response)
                 this.serviceToken.saveToken(response.data.token)
+                this.serviceToken.saveRefreshToken(response.data.refreshToken)
+                this.serviceToken.setDetailUser(response.data.usuario)
             })
         )
     }

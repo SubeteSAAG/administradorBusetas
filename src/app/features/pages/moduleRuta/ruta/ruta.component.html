@@ -1,0 +1,184 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<div style="font-size: 1rem; font-weight: 700; margin-bottom: 10px">
+  <p>{{ titulo }}</p>
+</div>
+
+<div class="container">
+  <form [formGroup]="routeForm" class="form-container" (ngSubmit)="onSubmit()">
+    <div class="p-col-12">
+      <label for="name" class="form-label">Nombre</label>
+      <input
+        id="name"
+        type="text"
+        class="custom-input"
+        placeholder="Nombre"
+        formControlName="name"
+      />
+      @if(routeForm.get('name')?.hasError('required') &&
+      routeForm.get('name')?.touched){
+      <div class="form-error" style="color: red">Nombre Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="description" class="form-label">Descripción</label>
+      <input
+        id="description"
+        type="text"
+        class="custom-input"
+        placeholder="Descripción"
+        formControlName="description"
+      />
+      @if(routeForm.get('description')?.hasError('required') &&
+      routeForm.get('description')?.touched){
+      <div class="form-error" style="color: red">Descripción Requerida</div>
+      }
+    </div>
+  </form>
+</div>
+
+<h5>AGREGAR HORARIOS</h5>
+
+<div class="container">
+  <form
+    [formGroup]="horarioForm"
+    class="form-container"
+    (ngSubmit)="onSubmit2()"
+  >
+    <div class="p-col-12">
+      <label for="dia" class="form-label">Dia</label>
+      <input
+        id="dia"
+        type="number"
+        class="custom-input"
+        placeholder="Dia"
+        min="1"
+        max="31"
+        formControlName="dia"
+      />
+      @if(horarioForm.get('dia')?.hasError('required') &&
+      horarioForm.get('dia')?.touched){
+      <div class="form-error" style="color: red">Dia Requerido</div>
+      } @if(horarioForm.get('dia')?.hasError('min') &&
+      horarioForm.get('dia')?.touched){
+      <div class="form-error" style="color: red">El valor minimo es 1</div>
+      } @if(horarioForm.get('dia')?.hasError('max') &&
+      horarioForm.get('dia')?.touched){
+      <div class="form-error" style="color: red">El valor maximo es 31</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="nombreDia" class="form-label">Nombre del Dia</label>
+      <select id="nombreDia" class="custom-input" formControlName="nombreDia">
+        <option value="" disabled selected>Seleccione un día</option>
+        <option *ngFor="let dia of ltsDiasSemana" [value]="dia.nombre">
+          {{ dia.nombre }}
+        </option>
+      </select>
+      <div
+        *ngIf="
+          horarioForm.get('nombreDia')?.hasError('required') &&
+          horarioForm.get('nombreDia')?.touched
+        "
+      >
+        <div class="form-error" style="color: red">
+          Nombre del Dia Requerido
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12">
+      <label for="horaSalida" class="form-label">Hora de Salida</label>
+      <input
+        id="horaSalida"
+        type="time"
+        class="custom-input"
+        placeholder="Hora de Salida"
+        formControlName="horaSalida"
+      />
+      @if(horarioForm.get('horaSalida')?.hasError('required') &&
+      horarioForm.get('horaSalida')?.touched){
+      <div class="form-error" style="color: red">Hora de Salida Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="horaLlegada" class="form-label">Hora de llegada</label>
+      <input
+        id="horaLlegada"
+        type="time"
+        class="custom-input"
+        placeholder="Hora de llegada"
+        formControlName="horaLlegada"
+      />
+      @if(horarioForm.get('horaLlegada')?.hasError('required') &&
+      horarioForm.get('horaLlegada')?.touched){
+      <div class="form-error" style="color: red">Hora de llegada Requerido</div>
+      }
+    </div>
+  </form>
+</div>
+
+<div style="text-align: center; margin-top: 1rem">
+  <p-button
+    label="AGREGAR HORARIO"
+    icon="pi pi-plus"
+    badgeClass="p-badge-contrast"
+    outlined="true"
+    (click)="addHorarioRuta()"
+  />
+</div>
+
+<h5 style="margin-top: 1rem">HORARIOS AGREGADOS</h5>
+
+@if(listHorarios){
+<div class="card">
+  <p-table
+    #dt1
+    [value]="listHorarios"
+    [tableStyle]="{ 'min-width': '40rem' }"
+    responsiveLayout="stack"
+    [paginator]="true"
+    [rows]="7"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 15%; text-align: center">Dia</th>
+        <th style="width: 25%; text-align: center">Nombre Dia</th>
+        <th style="width: 20%; text-align: center">Hora Salida</th>
+        <th style="width: 20%; text-align: center">Hora Llegada</th>
+        <th style="width: 20%; text-align: center">Quitar</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-horario>
+      <tr>
+        <td style="text-align: center">{{ getDia(horario) }}</td>
+        <td style="text-align: center">{{ getNombreDia(horario) }}</td>
+        <td style="text-align: center">{{ getHoraSalida(horario) }}</td>
+        <td style="text-align: center">{{ getHoraLlegada(horario) }}</td>
+        <td style="text-align: center">
+          <p-button
+            icon="pi pi-times"
+            [rounded]="true"
+            [text]="true"
+            [raised]="true"
+            severity="danger"
+            (click)="quitarItemHora(horario)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+}

@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PRIMENG_MODULES } from '../../primeng/primeng';
 import { CommonModule} from '@angular/common'
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Subject, Subscription } from 'rxjs';
+import { SearchService } from '@services/search-service';
+
 
 @Component({
   selector: 'app-modal-busqueda',
@@ -12,24 +14,44 @@ import { ReactiveFormsModule } from '@angular/forms';
     PRIMENG_MODULES,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
   ],
   templateUrl: './modal-busqueda.component.html',
   styleUrl: './modal-busqueda.component.scss'
 })
-export class ModalBusquedaComponent {
+export class ModalBusquedaComponent implements OnInit {
 
-  buscarPor: 'codigo' | 'nombre' = 'codigo';
-  valorBusqueda: string = '';
+  visible!: boolean 
+  content!: string;
+  value: string = ""
 
-  constructor(public ref: DynamicDialogRef) {}
+  private readonly serviceSearch = inject(SearchService)
 
 
-  buscar() {
-    this.ref.close({ tipo: this.buscarPor, valor: this.valorBusqueda });
+  constructor(public ref: DynamicDialogRef, 
+    private config: DynamicDialogConfig
+  ) {}
+
+  ngOnInit(): void {
+    if (this.config.data) {
+      this.visible = this.config.data.visible
+      this.content = this.config.data.content;
+    }
+
+  }
+
+  ngOnDestroy(): void {
+    this.ref.close(this.value);
   }
   
-  cancelar() {
-    this.ref.close();
+
+  onInputChange(event: any) {
+    this.value = event.target.value;
+    this.serviceSearch.onSearchValue(this.value)
   }
+
+  onEnterKey(): void {
+    this.ref.close(this.value);
+  }
+
+
 }

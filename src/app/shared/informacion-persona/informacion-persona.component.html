@@ -1,23 +1,171 @@
 <div class="card">
   <div class="text-center">
-    <span>Información Persona</span>
+    <h3>INFORMACIÓN</h3>
   </div>
 
-  @if(entity){ @switch(entityType){ @case ("Usuario"){
+  @if(entity){ @switch(entityType){ @case ("Persona"){
   <div style="padding: 0.5rem">
     <div class="flex flex-row flex-wrap">
-      <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
-      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Nombres:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.nombres }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Apellidos:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.apellidos }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Sobre Nombre:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.sobreNombre }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Identificación:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.identificacion }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Telefono:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.telefono }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Celular:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.celular }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Fecha Nacimiento:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.fechaNacimiento }}
+      </span>
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem; display: inline-block"
+        >Dirección:</span
+      >
+      <span
+        style="
+          font-size: 12px;
+          flex: 1;
+          word-wrap: break-word;
+          display: inline-block;
+        "
+      >
+        {{ entity.informacionPersonal.direccion }}
+      </span>
     </div>
   </div>
   } @case ("Buseta"){
   <div style="padding: 0.5rem">
     <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Nombre:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.name }}
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Capacidad:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.capacidad }}
+    </div>
+    <div class="flex flex-row flex-wrap">
       <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
       <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.description }}
     </div>
   </div>
-  } } }
+  } @case ("Empresa"){
+  <div style="padding: 0.5rem">
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Ruc:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.ruc }}
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Nombre:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.nombre }}
+    </div>
+    <div class="flex flex-row flex-wrap">
+      <span style="font-size: 14px; min-width: 6rem">Descripción:</span>
+      <span style="font-size: 12px; flex: 1; word-wrap: break-word"> </span>
+      {{ entity.descripcion }}
+    </div>
+  </div>
+
+  } } } @else{
+  <h5 style="text-align: center">NO TIENE INFORMACIÓN SELECCIONADA</h5>
+  }
 
   <!-- @switch ("UsuarioModel") { @case ("UsuarioModel") {
   <div style="padding: 0.5rem">

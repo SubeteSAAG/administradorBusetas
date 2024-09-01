@@ -14,11 +14,11 @@ export const routes: Routes = [
         canActivate: [ loginGuard ],
         loadComponent: () => import('@features/dashboard/dashboard.component'),
         children: [
-            {
+            /*{
                 path: 'conductor',
                 title: 'Conductor',
                 loadComponent: () => import('@features/pages/moduleConductor/conductor/conductor.component')
-            },
+            },*/
             {
                 path: 'empresa',
                 title: 'Empresa',
@@ -40,8 +40,33 @@ export const routes: Routes = [
                 loadComponent: () => import('@features/pages/moduleEstudiante/estudiante/estudiante.component')
             },
             {
+                path: 'ruta',
+                title: 'Ruta',
+                loadComponent: () => import('@features/pages/moduleRuta/ruta/ruta.component')
+            },
+            {
+                path: 'pasajero',
+                title: 'Pasajero',
+                loadComponent: () => import('@features/pages/modulePasajero/pasajero/pasajero.component')
+            },
+            {
+                path: 'asignacion-buseta',
+                title: 'Asignaciones de Buseta',
+                loadComponent: () => import('@features/pages/moduleBuseta/asignaciones/asignaciones.component')
+            },
+            {
+                path: 'gestion-pasajero',
+                title: 'Gestión de Pasajeros',
+                loadComponent: () => import('@features/pages/modulePasajero/gestion-pasajero/gestion-pasajero.component')
+            },
+            {
+                path: 'gestion-usuario',
+                title: 'Gestión de Usuarios',
+                loadComponent: () => import('@features/pages/moduleUsuario/gestion-usuarios/gestion-usuarios.component')
+            },
+            {
                 path: '',
-                redirectTo: '/dashboard/conductor',
+                redirectTo: '/dashboard/usuario',
                 pathMatch: 'full'
             }
         ]

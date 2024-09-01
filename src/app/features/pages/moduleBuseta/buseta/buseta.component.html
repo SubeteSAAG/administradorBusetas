@@ -13,6 +13,27 @@
 >
 </app-message>
 
+<!--<p-dialog
+  header="Edit Profile"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+>
+  <span class="p-text-secondary block mb-5">Update your information.</span>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label for="username" class="font-semibold w-6rem">Username</label>
+    <input pInputText id="username" class="flex-auto" autocomplete="off" />
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+    <label for="email" class="font-semibold w-6rem">Email</label>
+    <input pInputText id="email" class="flex-auto" autocomplete="off" />
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+    <p-button label="Save" (onClick)="visible = false" />
+  </div>
+</p-dialog>-->
+
 <div style="font-size: 1rem; font-weight: 700; margin-bottom: 10px">
   <p>{{ titulo }}</p>
 </div>
@@ -20,7 +41,22 @@
 <div class="container">
   <form [formGroup]="busetaForm" class="form-container" (ngSubmit)="onSubmit()">
     <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
+      <label for="placa" class="form-label">Placa</label>
+      <input
+        id="placa"
+        type="text"
+        class="custom-input"
+        placeholder="Placa"
+        formControlName="placa"
+        appUppercase
+      />
+      @if(busetaForm.get('placa')?.hasError('required') &&
+      busetaForm.get('placa')?.touched){
+      <div class="form-error" style="color: red">placa requerida</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Tipo Vehiculo</label>
       <input
         id="nombre"
         type="text"
@@ -30,11 +66,11 @@
       />
       @if(busetaForm.get('nombre')?.hasError('required') &&
       busetaForm.get('nombre')?.touched){
-      <div class="form-error" style="color: red">Nombre requerido</div>
+      <div class="form-error" style="color: red">Tipo Vehiculo requerido</div>
       }
     </div>
     <div class="mb-3">
-      <label for="descripcion" class="form-label">Descripcion</label>
+      <label for="descripcion" class="form-label">Marca</label>
       <input
         id="descripcion"
         type="text"
@@ -44,7 +80,7 @@
       />
       @if(busetaForm.get('descripcion')?.hasError('required') &&
       busetaForm.get('descripcion')?.touched){
-      <div class="form-error" style="color: red">Descripcion requerido</div>
+      <div class="form-error" style="color: red">Marca requerido</div>
       }
     </div>
     <div class="mb-3">

@@ -1,0 +1,167 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<div style="font-size: 1rem; font-weight: 700; margin-bottom: 10px">
+  <p>{{ titulo }}</p>
+</div>
+
+<div class="container">
+  <form
+    [formGroup]="usuarioForm"
+    class="form-container"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="p-col-12">
+      <label for="nombres" class="form-label">Nombres</label>
+      <input
+        id="nombres"
+        type="text"
+        class="custom-input"
+        placeholder="Nombres"
+        formControlName="nombres"
+      />
+      @if(usuarioForm.get('nombres')?.hasError('required') &&
+      usuarioForm.get('nombres')?.touched){
+      <div class="form-error" style="color: red">Nombres Requeridos</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="apellidos" class="form-label">Apellidos</label>
+      <input
+        id="apellidos"
+        type="text"
+        class="custom-input"
+        placeholder="Apellidos"
+        formControlName="apellidos"
+      />
+      @if(usuarioForm.get('apellidos')?.hasError('required') &&
+      usuarioForm.get('apellidos')?.touched){
+      <div class="form-error" style="color: red">Apellidos Requeridos</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="sobreNombre" class="form-label">Sobre Nombre</label>
+      <input
+        id="sobreNombre"
+        type="text"
+        class="custom-input"
+        placeholder="Sobre Nombre"
+        formControlName="sobreNombre"
+      />
+      @if(usuarioForm.get('sobreNombre')?.hasError('required') &&
+      usuarioForm.get('sobreNombre')?.touched){
+      <div class="form-error" style="color: red">Sobre nombre Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="tipoIdentificacion" class="form-label"
+        >Tipo Identificación</label
+      >
+      <select
+        id="tipoIdentificacion"
+        class="custom-input"
+        formControlName="tipoIdentificacion"
+      >
+        <option value="" disabled selected>
+          Seleccione Tipo Identificación
+        </option>
+        @for(option of ltsTipoIdentificacion; track
+        option.idTipoIdentificacion){
+        <option [value]="option.idTipoIdentificacion">
+          {{ option.nombre }}
+        </option>
+        }
+      </select>
+      @if(usuarioForm.get('tipoIdentificacion')?.hasError('required') &&
+      usuarioForm.get('tipoIdentificacion')?.touched){
+      <div class="form-error" style="color: red">
+        Tipo Identificación Requerido
+      </div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="identificacion" class="form-label">Identificación</label>
+      <input
+        id="identificacion"
+        type="text"
+        class="custom-input"
+        placeholder="Identificación"
+        formControlName="identificacion"
+      />
+      @if(usuarioForm.get('identificacion')?.hasError('required') &&
+      usuarioForm.get('identificacion')?.touched){
+      <div class="form-error" style="color: red">Identificación Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="telefono" class="form-label">Telefono</label>
+      <input
+        id="telefono"
+        type="number"
+        class="custom-input"
+        placeholder="Telefono"
+        formControlName="telefono"
+      />
+      @if(usuarioForm.get('telefono')?.hasError('required') &&
+      usuarioForm.get('telefono')?.touched){
+      <div class="form-error" style="color: red">Telefono Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="celular" class="form-label">Célular</label>
+      <input
+        id="celular"
+        type="number"
+        class="custom-input"
+        placeholder="Célular"
+        formControlName="celular"
+      />
+      @if(usuarioForm.get('celular')?.hasError('required') &&
+      usuarioForm.get('celular')?.touched){
+      <div class="form-error" style="color: red">Célular Requerido</div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
+      <input
+        id="fechaNacimiento"
+        type="date"
+        class="custom-input"
+        placeholder="Fecha Nacimeinto"
+        formControlName="fechaNacimiento"
+      />
+      @if(usuarioForm.get('fechaNacimiento')?.hasError('required') &&
+      usuarioForm.get('fechaNacimiento')?.touched){
+      <div class="form-error" style="color: red">
+        Fecha Nacimiento Requerido
+      </div>
+      }
+    </div>
+    <div class="p-col-12">
+      <label for="direccion" class="form-label">Dirección</label>
+      <input
+        id="direccion"
+        type="text"
+        class="custom-input"
+        placeholder="Dirección"
+        formControlName="direccion"
+      />
+      @if(usuarioForm.get('direccion')?.hasError('required') &&
+      usuarioForm.get('direccion')?.touched){
+      <div class="form-error" style="color: red">Dirección Requerida</div>
+      }
+    </div>
+  </form>
+</div>

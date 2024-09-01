@@ -70,8 +70,12 @@ export default class ConductorComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    this.guardarSubscription.unsubscribe();
-    this.editarSubscription.unsubscribe();
+    if(this.guardarSubscription){
+      this.guardarSubscription.unsubscribe();
+    }
+    if(this.editarSubscription){
+      this.editarSubscription.unsubscribe();
+    }
   }
 
   onSubmit(){

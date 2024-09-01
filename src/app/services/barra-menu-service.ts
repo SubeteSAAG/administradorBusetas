@@ -10,7 +10,8 @@ export class BarraMenuService {
     
     private guardarSubject = new Subject<void>();
     private editarSubject = new Subject<void>();
-    private buscarSubject = new Subject<{ tipo: string, valor: string }>();
+    private buscarSubject = new Subject<void>();
+    private panelInformativoSubject = new Subject<void>();
 
     onGuardar() {
         this.guardarSubject.next();
@@ -20,9 +21,13 @@ export class BarraMenuService {
         this.editarSubject.next();
     }
 
-    onBuscar(data: { tipo: string, valor: string }) {
-        this.buscarSubject.next(data);
-      }
+    onBuscar() {
+        this.buscarSubject.next();
+    }
+
+    onPanelInformativo(){
+        this.panelInformativoSubject.next();
+    }
     
 
     getGuardarObservable() {
@@ -33,7 +38,11 @@ export class BarraMenuService {
         return this.editarSubject.asObservable();
     }
 
-    getBuscarObservable(): Observable<{ tipo: string, valor: string }> {
+    getBuscarObservable() {
         return this.buscarSubject.asObservable();
+    }
+
+    getPanelInformativoObservable(){
+        return this.panelInformativoSubject.asObservable();
     }
 }

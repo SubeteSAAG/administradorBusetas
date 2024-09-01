@@ -7,6 +7,12 @@ import { BarraMenuComponent} from '@shared/barra-menu/barra-menu.component'
 import { InformacionPersonaComponent} from '@shared/informacion-persona/informacion-persona.component'
 import { LoginService } from '@services/login-service'
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { Usuario } from '@models/response-login';
+import { TokenService } from '@services/token-service';
+import { BusetaModel } from '@models/buseta';
+import { EntityService } from '@services/entity-service';
+import { Subscription } from 'rxjs';
+import { BarraMenuService } from '@services/barra-menu-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,30 +30,35 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 })
 export default class DashboardComponent implements OnInit {
   
+  private panelInformativoSubscription!: Subscription;
 
-  ltsMenus: Menu[] = [
-    
+
+  private readonly serviceToken = inject(TokenService)
+  private readonly serviceEntity = inject(EntityService)
+  private readonly serviceMenuBarra = inject(BarraMenuService)
+
+  userLogged: Usuario | null = null;
+  listSearchBusetas: BusetaModel[] = []
+  vidibelComponents: boolean = true
+  ltsPathsIndependientes: any[] = [
     {
-      id_menu: 1,
-      nombre: 'Usuarios',
-      icono: 'pi pi-user',
-      estado: true,
-      path: '',
-      isOpen: false,
-      submenus: [
-        {
-          id_menu: 1,
-          nombre: 'Mantenimiento',
-          icono: 'pi pi-comments',
-          estado: true,
-          path: '/dashboard/usuario',
-          isOpen: false,
-          submenus: []
-        }
-      ]
+      id_menu: 2,
+      path: 'asignacion-buseta',
     },
     {
       id_menu: 2,
+      path: 'gestion-pasajero'
+    },
+    {
+      id_menu: 2,
+      path: 'gestion-usuario'
+    }
+  ]
+
+
+  ltsMenus: Menu[] = [
+    {
+      id_menu: 1,
       nombre: 'Empresas',
       icono: 'pi pi-warehouse',
       estado: true,
@@ -66,6 +77,36 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
+      id_menu: 2,
+      nombre: 'Usuarios',
+      icono: 'pi pi-user',
+      estado: true,
+      path: '',
+      isOpen: false,
+      submenus: [
+        {
+          id_menu: 1,
+          nombre: 'Mantenimiento',
+          icono: 'pi pi-comments',
+          estado: true,
+          path: '/dashboard/usuario',
+          isOpen: false,
+          submenus: []
+        },
+        {
+          id_menu: 2,
+          nombre: 'Gestión de Usuarios',
+          icono: 'pi pi-user',
+          estado: true,
+          path: '/dashboard/gestion-usuario',
+          isOpen: false,
+          submenus: []
+
+        }
+
+      ]
+    },
+    /*{
       id_menu: 3,
       nombre: 'Conductor',
       icono: 'pi pi-user',
@@ -84,9 +125,9 @@ export default class DashboardComponent implements OnInit {
 
         }
       ]
-    },
+    },*/
     {
-      id_menu: 4,
+      id_menu: 3,
       nombre: 'Busetas',
       icono: 'pi pi-car',
       estado: true,
@@ -104,10 +145,10 @@ export default class DashboardComponent implements OnInit {
         },
         {
           id_menu: 2,
-          nombre: 'Asignación',
+          nombre: 'Gestión de Busetas',
           icono: 'pi pi-comments',
           estado: true,
-          path: '/dashboard/asignarBuseta',
+          path: '/dashboard/asignacion-buseta',
           isOpen: false,
           submenus: []
 
@@ -115,7 +156,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 5,
+      id_menu: 4,
       nombre: 'Estudiante',
       icono: 'pi pi-user',
       estado: true,
@@ -135,7 +176,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 6,
+      id_menu: 5,
       nombre: 'Pasajero',
       icono: 'pi pi-user',
       estado: true,
@@ -153,10 +194,10 @@ export default class DashboardComponent implements OnInit {
         },
         {
           id_menu: 2,
-          nombre: 'Asignación',
+          nombre: 'Gestión Pasajeros',
           icono: 'pi pi-comments',
           estado: true,
-          path: '/asignarRuta',
+          path: '/dashboard/gestion-pasajero',
           isOpen: false,
           submenus: []
 
@@ -165,7 +206,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 7,
+      id_menu: 6,
       nombre: 'Rutas',
       icono: 'pi pi-map',
       estado: true,
@@ -185,7 +226,7 @@ export default class DashboardComponent implements OnInit {
       ]
     },
     {
-      id_menu: 8,
+      id_menu: 7,
       nombre: 'Recorridos',
       icono: 'pi pi-map-marker',
       estado: true,
@@ -205,9 +246,6 @@ export default class DashboardComponent implements OnInit {
       ]
     }
 
-
-
-
   ];
 
 
@@ -217,11 +255,28 @@ export default class DashboardComponent implements OnInit {
     private route: Router
   ){
 
+    
   }
 
 
   ngOnInit(): void {
       console.log('init appp..>>')
+      this.userLogged = this.serviceToken.getDetailUser()
+
+    this.panelInformativoSubscription = this.serviceMenuBarra.getPanelInformativoObservable().subscribe(() => {
+      const valor = localStorage.getItem('visible');
+      if(valor == "true"){
+        this.vidibelComponents = true
+      }else{
+        this.vidibelComponents = false
+      }
+    });
+  
+
+  }
+
+  clearPanel(){
+    this.serviceEntity.setEntity(this.listSearchBusetas[0])
   }
 
   toggleMenu(menu: Menu) {
@@ -234,10 +289,22 @@ export default class DashboardComponent implements OnInit {
 
   navigate(path: string) {
     if (path) {
-      //console.log("clik menu")
-      //this.serviceEntity.setEntity(this.user)
-      this.route.navigate([path]);
+      console.log(path)
+      console.log(path.split('/')[2])
+      const index = this.ltsPathsIndependientes.findIndex(item => item.path === path.split('/')[2])
+      localStorage.setItem('path', path.split('/')[2]);
+      console.log("indeccccxxxx")
+      console.log(index)
+      if(index != -1){
+        this.vidibelComponents = false
+        localStorage.setItem('visible', 'false');
+      }else{
+        this.vidibelComponents = true
+        localStorage.setItem('visible', 'true');
 
+      }
+      this.route.navigate([path]);
+      this.clearPanel()
     }
   }
 
@@ -254,5 +321,6 @@ export default class DashboardComponent implements OnInit {
     this.serviceLogin.logout()
     this.route.navigate(["/login"])
   }
+
 
 }

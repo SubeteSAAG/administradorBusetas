@@ -18,3 +18,28 @@ export const AuthInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 };
+
+
+/*
+
+if(req.context.get(CHECK_TOKEN)){
+  const isValidToken = this.tokenService.isValidToken()
+  if(isValidToken){
+    return addTokenHeaders()
+  }else{
+    return llamarNuevaApi()
+  }
+}
+return next(req)
+
+llamarNuevaApi(req, next){
+  const isValidToken = this.tokenService.isValidToken()
+  if(isValidToken){
+     return serviceLogin.login(user, pass).pipe(
+      switchMap(() => this.addToken(req, next))
+    )
+  }
+  return next(req)
+}
+
+*/

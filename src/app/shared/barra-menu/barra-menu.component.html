@@ -1,4 +1,4 @@
-<p-menubar [model]="items" class="align-right">
+<!--<p-menubar [model]="items" class="align-right">
   <ng-template pTemplate="item" let-item let-root="root" class="border-circle">
     <a
       pRipple
@@ -8,7 +8,19 @@
       <span [class]="item.icon"></span>
       <span class="ml-2">{{ item.label }}</span>
     </a>
+    
   </ng-template>
-</p-menubar>
+</p-menubar>-->
 
-<app-modal-busqueda></app-modal-busqueda>
+<div class="dock-window">
+  <p-dock [model]="items" [position]="position">
+    <ng-template pTemplate="item" let-item>
+      <img
+        [src]="item.icon"
+        [alt]="item.label"
+        width="100%"
+        (click)="accionItem(item)"
+      />
+    </ng-template>
+  </p-dock>
+</div>
