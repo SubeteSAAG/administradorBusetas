@@ -36,6 +36,11 @@ export interface PasajeroListaModel{
     ubicacionDomicilio: string,
     abordo: string,
     esEstudiante: boolean
-  }
+}
+
+export interface AsignarPasajeroRutaModel {
+  pasajeroId: number,
+  busetaRutaId: number
+}
 
 

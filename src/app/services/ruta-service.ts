@@ -19,8 +19,8 @@ export class RutaService{
     public ltsPasajerosByRutaBuseta = signal<ApiResponse | any>(null)
 
 
-    public getLtsRutaByEmpresa(){
-        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/listar/1`)
+    public getLtsRutaByEmpresa(empresaId: number){
+        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/listar/${empresaId}`)
         .pipe(tap((response: ApiResponse) => this.ltsRutaByEmpresa.set(response)))
         .subscribe()
 

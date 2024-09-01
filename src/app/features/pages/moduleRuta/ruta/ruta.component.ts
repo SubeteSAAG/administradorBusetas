@@ -16,6 +16,8 @@ import { LoadingService } from '@services/loading-service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RutaService } from '@services/ruta-service';
 import { hoarioModel, RutaModel } from '@models/ruta';
+import { Usuario } from '@models/response-login';
+import { TokenService } from '@services/token-service';
 
 @Component({
   selector: 'app-ruta',
@@ -46,6 +48,8 @@ export default class RutaComponent implements OnInit{
   private readonly serviceLoading = inject(LoadingService)
   private readonly serviceRuta = inject(RutaService)
   private readonly serviceSearch = inject(SearchService)
+  private readonly serviceToken = inject(TokenService)
+
 
   routeForm!: FormGroup
   horarioForm!: FormGroup
@@ -55,6 +59,8 @@ export default class RutaComponent implements OnInit{
   listHorarios: hoarioModel[] = []
   message!: MessageModel
   ref!: DynamicDialogRef;
+  userLogged: Usuario | null = null;
+
 
 
   ltsDiasSemana: any[] = [
@@ -95,6 +101,8 @@ export default class RutaComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.userLogged = this.serviceToken.getDetailUser()
+
     this.guardarSubscription = this.serviceBarraMenu.getGuardarObservable().subscribe(() => {
       this.guardar();
     });
@@ -107,7 +115,7 @@ export default class RutaComponent implements OnInit{
       this.buscar();
     });    
 
-    this.serviceRuta.getLtsRutaByEmpresa()
+    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
 
     this.searchSubscription = this.serviceSearch.getSearchValueObservable().subscribe((value: any) => {
       console.log("llegagaga busqueueu")
@@ -298,7 +306,7 @@ export default class RutaComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa()
+            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
 
           }else{
 
@@ -371,7 +379,7 @@ export default class RutaComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa()
+            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
             this.serviceEntity.setEntity(response.data)
           }else{
 
