@@ -19,7 +19,7 @@ export class ButtonComponent {
   @Input() disabled = false;
   @Input() loading = false;
   @Input() typeBtn: 'reset' | 'submit' | 'button' = 'button';
-  @Input() color: 'success' | 'primary' | 'danger' | 'light' | 'sky' =
+  @Input() color: 'success' | 'primary' | 'danger' | 'light' | 'custom' | 'sky' =
     'primary';
 
   faSpinner = FONTAWESOME_ICONS.faSpinner;
@@ -49,12 +49,19 @@ export class ButtonComponent {
       'focus:ring-gray-50': true,
       'text-gray-700': true,
     },
+    custom: {
+      'bg-custom-color': true,
+      'hover:bg-sky-800': true,
+      'focus:ring-sky-300': true,
+      'text-white': true,
+    },
     sky: {
       'bg-sky-700': true,
       'hover:bg-sky-800': true,
       'focus:ring-sky-300': true,
       'text-white': true,
     },
+
   };
 
   constructor() {}
