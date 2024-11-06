@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 
 enum EntityType {
   Buseta = 'Buseta',
-  Usuario = 'Usuario',
+  Persona = 'Persona',
+  Empresa = 'Empresa'
 }
 
 
@@ -21,7 +22,7 @@ enum EntityType {
 })
 export class InformacionPersonaComponent implements OnInit{
 
-  entity: BusetaModel | UsuarioModel | null = null;
+  entity: any;
   entityType: EntityType = EntityType.Buseta; 
 
   private readonly serviceInfo = inject(EntityService)
@@ -31,6 +32,8 @@ export class InformacionPersonaComponent implements OnInit{
     console.log("ingresa infor")
     this.serviceInfo.currentEntity$.subscribe(entity => {
       this.entity = entity;
+      console.log("que entty")
+      console.log(this.entity)
       this.entityType = this.determineEntityType(entity);
       console.log("mmmmmmmmmmm")
       console.log(this.entityType)
@@ -40,8 +43,10 @@ export class InformacionPersonaComponent implements OnInit{
   determineEntityType(entity: any): EntityType {
     if (entity && 'propietario' in entity) {
       return EntityType.Buseta;
-    } else if (entity && 'userName' in entity) {
-      return EntityType.Usuario;
+    }else if(entity && 'informacionPersonal' in entity){
+      return EntityType.Persona;
+    }else if(entity && 'ruc' in entity){
+      return EntityType.Empresa;
     } 
     return EntityType.Buseta; // Ajusta el valor predeterminado según tus necesidades
   }

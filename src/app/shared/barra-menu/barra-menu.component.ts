@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { PRIMENG_MODULES } from '../../primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { CommonModule} from '@angular/common'
-import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.component'
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BarraMenuService } from '@services/barra-menu-service'
 
 @Component({
@@ -12,10 +10,9 @@ import { BarraMenuService } from '@services/barra-menu-service'
   imports: [
     PRIMENG_MODULES,
     CommonModule,
-    ModalBusquedaComponent
   ],
   templateUrl: './barra-menu.component.html',
-  styleUrl: './barra-menu.component.scss'
+  styleUrl: './barra-menu.component.scss',
 })
 export class BarraMenuComponent {
 
@@ -23,10 +20,12 @@ export class BarraMenuComponent {
 
   items: MenuItem[] | undefined;
 
-  constructor(private dialogService: DialogService, private serviceBarraMenu: BarraMenuService) {}
+  position: 'bottom' | 'top' | 'left' | 'right' = 'top';
+
+  constructor(private serviceBarraMenu: BarraMenuService) {}
 
   ngOnInit() {
-    this.items = [
+    /*this.items = [
       {
         label: 'Guardar',
         icon: 'pi pi-save'
@@ -38,6 +37,20 @@ export class BarraMenuComponent {
       {
         label: 'Buscar',
         icon: 'pi pi-search',
+      }
+    ];*/
+    this.items = [
+      {
+          label: 'Guardar',
+          icon: 'assets/logo/Buseta.png'
+      },
+      {
+          label: 'Editar',
+          icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg'
+      },
+      {
+          label: 'Buscar',
+          icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg'
       }
     ];
   }
@@ -71,17 +84,9 @@ export class BarraMenuComponent {
   }
 
   private abrirModalBusqueda() {
-    console.log('clisis')
-    const ref: DynamicDialogRef = this.dialogService.open(ModalBusquedaComponent, {
-      header: 'Buscar',
-      width: '50%'
-    });
 
-    ref.onClose.subscribe((result) => {
-      if (result) {
-        this.serviceBarraMenu.onBuscar(result);
-      }
-    });
+    this.serviceBarraMenu.onBuscar()
+ 
   }
 
 }

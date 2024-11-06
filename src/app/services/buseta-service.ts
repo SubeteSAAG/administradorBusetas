@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject, signal } from "@angular/core";
 import { environment } from "@envs/environment";
 import { ApiResponse } from "@models/api-response";
-import { BusetaModel } from "@models/buseta";
+import { AsignarBusetaEmpresaModel, AsignarBusetaRutaModel, BusetaModel } from "@models/buseta";
 import { Observable, tap } from "rxjs";
 
 @Injectable({
@@ -11,18 +11,17 @@ import { Observable, tap } from "rxjs";
 export class BusetaService{
 
 
-    public ltsBusetas = signal<BusetaModel[]>([])
+    public ltsBusetas = signal<ApiResponse | any>(null)
     private readonly http = inject(HttpClient)
     private readonly endpoint = "/Busetas"
     private readonly apiUrl = environment.API_URL
 
     constructor(){
-        this.getLtsBusetas()
     }
 
     public getLtsBusetas(){
-        this.http.get<BusetaModel[]>(`${this.apiUrl}${this.endpoint}/listar`)
-        .pipe(tap((data: BusetaModel[]) => this.ltsBusetas.set(data)))
+        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/listar`)
+        .pipe(tap((data: ApiResponse) => this.ltsBusetas.set(data)))
         .subscribe()
 
     }
@@ -31,6 +30,19 @@ export class BusetaService{
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Crear`, buseta);
     }
 
+
+    public editBuseta(buseta: BusetaModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Actualizar`, buseta);
+    }
+
+
+    public asignarBusetaRuta(asignar: AsignarBusetaRutaModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/AsignarBusetaRuta`, asignar);
+    }
+
+    public asignarBusetaEmpresa(asignarEmpresa: AsignarBusetaEmpresaModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/AsignarBusetaEmpresa`, asignarEmpresa);
+    }
 
     
 

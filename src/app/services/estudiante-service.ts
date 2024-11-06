@@ -29,5 +29,9 @@ export class EstudianteService{
     }
 
 
+    public editEstudent(estudent: EstudianteModel): Observable<ApiResponse> {
+        return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Actualizar`, estudent);
+    }
+
 
 }

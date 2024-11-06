@@ -1,23 +1,19 @@
-<p-dialog header="Buscar" [modal]="true" [closable]="true">
+<!--<div [innerHTML]="content"></div>-->
+
+<div class="container-modal">
+  <div style="font-weight: 500" [innerHTML]="content"></div>
+
   <div>
-    <p-radioButton
-      name="buscarPor"
-      value="codigo"
-      [(ngModel)]="buscarPor"
-      inputId="cod1"
-    ></p-radioButton>
-    <label for="cod1" class="ml-2"> Codigo </label>
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-search" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Ingrese Busqueda"
+        [(ngModel)]="value"
+        (input)="onInputChange($event)"
+        (keydown.enter)="onEnterKey()"
+      />
+    </p-iconField>
   </div>
-  <div>
-    <input
-      type="text"
-      pInputText
-      [(ngModel)]="valorBusqueda"
-      placeholder="Ingrese el valor de búsqueda"
-    />
-  </div>
-  <div class="mt-3">
-    <button pButton label="Buscar" (click)="buscar()" class="mr-2"></button>
-    <button pButton label="Cancelar" (click)="cancelar()"></button>
-  </div>
-</p-dialog>
+</div>

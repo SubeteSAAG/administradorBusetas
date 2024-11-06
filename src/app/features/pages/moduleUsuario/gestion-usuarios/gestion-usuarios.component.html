@@ -1,0 +1,234 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<p-confirmDialog />
+
+<h4 style="padding: 5px; margin-left: 2rem">GESTIÓN DE USUARIOS</h4>
+
+<div class="card">
+  <p-tabView>
+    <p-tabPanel header="USUARIOS CONDUCTOR">
+      @if(ltsUsuariosConducotres()){
+
+      <p-table
+        #dt1
+        [value]="ltsUsuariosConducotres().data"
+        [tableStyle]="{ 'min-width': '30rem' }"
+        responsiveLayout="stack"
+        [paginator]="true"
+        [rows]="5"
+        [globalFilterFields]="[
+          'informacionPersonal.identificacion',
+          'informacionPersonal.nombres',
+          'informacionPersonal.apellidos'
+        ]"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button
+              pButton
+              class="p-button-outlined"
+              icon="pi pi-refresh"
+              (click)="recargar()"
+            ></button>
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="
+                  dt1.filterGlobal($any($event.target).value, 'contains')
+                "
+                placeholder="BUSCAR CONDUCTOR"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 15%; text-align: center">Cédula</th>
+            <th style="width: 25%; text-align: center">Nombres</th>
+            <th style="width: 25%; text-align: center">Apellidos</th>
+            <!--<th style="width: 15%; text-align: center">Telefono</th>-->
+            <th style="width: 15%; text-align: center">Celular</th>
+            <!--<th style="width: 25%; text-align: center">direccion</th>-->
+            <th style="width: 15%; text-align: center">Usuario</th>
+            <th style="width: 25%; text-align: center">Correo</th>
+            <th style="width: 10%; text-align: center">Estado</th>
+            <th style="width: 10%; text-align: center">Cambiar</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-conductor>
+          <tr>
+            <td style="text-align: center">
+              {{ conductor.informacionPersonal.identificacion }}
+            </td>
+            <td style="text-align: center">
+              {{ conductor.informacionPersonal.nombres }}
+            </td>
+            <td style="text-align: center">
+              {{ conductor.informacionPersonal.apellidos }}
+            </td>
+            <!--<td style="text-align: center">
+              {{ conductor.informacionPersonal.telefono }}
+            </td>-->
+            <td style="text-align: center">
+              {{ conductor.informacionPersonal.celular }}
+            </td>
+            <!--<td style="text-align: center">
+              {{ conductor.informacionPersonal.direccion }}
+            </td>-->
+            <td style="text-align: center">{{ conductor.usuario.userName }}</td>
+            <td style="text-align: center">{{ conductor.usuario.email }}</td>
+            <td style="text-align: center">
+              @if(conductor.usuario.isActive){
+              <p-tag severity="success" value="Activo" [rounded]="true" />
+              } @else{
+              <p-tag severity="danger" value="Inactivo" [rounded]="true" />
+              }
+            </td>
+            <td style="text-align: center">
+              @if(conductor.usuario.isActive){
+              <p-button
+                (onClick)="ActiveDeactivate($event, conductor, 2)"
+                label="Desactivar"
+                severity="danger"
+                [outlined]="true"
+              />
+              } @else{
+              <p-button
+                (onClick)="ActiveDeactivate($event, conductor, 1)"
+                label="Activar"
+                [outlined]="true"
+              />
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      }
+    </p-tabPanel>
+    <p-tabPanel header="USUARIOS REPRESENTANTES">
+      @if(ltsUsuariosRepresentantes()){
+
+      <p-table
+        #dt1
+        [value]="ltsUsuariosRepresentantes().data"
+        [tableStyle]="{ 'min-width': '30rem' }"
+        responsiveLayout="stack"
+        [paginator]="true"
+        [rows]="5"
+        [globalFilterFields]="[
+          'informacionPersonal.identificacion',
+          'informacionPersonal.nombres',
+          'informacionPersonal.apellidos'
+        ]"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <button
+              pButton
+              class="p-button-outlined"
+              icon="pi pi-refresh"
+              (click)="recargar()"
+            ></button>
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="
+                  dt1.filterGlobal($any($event.target).value, 'contains')
+                "
+                placeholder="BUSCAR REPRESENTANTE"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 15%; text-align: center">Cédula</th>
+            <th style="width: 25%; text-align: center">Nombres</th>
+            <th style="width: 25%; text-align: center">Apellidos</th>
+            <!--<th style="width: 15%; text-align: center">Telefono</th>-->
+            <th style="width: 15%; text-align: center">Celular</th>
+            <!--<th style="width: 25%; text-align: center">direccion</th>-->
+            <th style="width: 15%; text-align: center">Usuario</th>
+            <th style="width: 25%; text-align: center">Correo</th>
+            <th style="width: 10%; text-align: center">Estado</th>
+            <th style="width: 10%; text-align: center">Cambiar</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-representante>
+          <tr>
+            <td style="text-align: center">
+              {{ representante.informacionPersonal.identificacion }}
+            </td>
+            <td style="text-align: center">
+              {{ representante.informacionPersonal.nombres }}
+            </td>
+            <td style="text-align: center">
+              {{ representante.informacionPersonal.apellidos }}
+            </td>
+            <!--<td style="text-align: center">
+              {{ representante.informacionPersonal.telefono }}
+            </td>-->
+            <td style="text-align: center">
+              {{ representante.informacionPersonal.celular }}
+            </td>
+            <!--<td style="text-align: center">
+              {{ representante.informacionPersonal.direccion }}
+            </td>-->
+            <td style="text-align: center">
+              {{ representante.usuario.userName }}
+            </td>
+            <td style="text-align: center">
+              {{ representante.usuario.email }}
+            </td>
+            <td style="text-align: center">
+              @if(representante.usuario.isActive){
+              <p-tag severity="success" value="Activo" [rounded]="true" />
+
+              } @else{
+              <p-tag severity="danger" value="Inactivo" [rounded]="true" />
+              }
+            </td>
+            <td style="text-align: center">
+              @if(representante.usuario.isActive){
+              <div class="card flex justify-content-center gap-2">
+                <p-button
+                  (onClick)="ActiveDeactivate($event, representante, 2)"
+                  label="Desactivar"
+                  severity="danger"
+                  [outlined]="true"
+                />
+              </div>
+              } @else{
+              <div class="card flex justify-content-center gap-2">
+                <p-button
+                  (onClick)="ActiveDeactivate($event, representante, 1)"
+                  label="Activar"
+                  [outlined]="true"
+                />
+              </div>
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      }
+    </p-tabPanel>
+  </p-tabView>
+</div>

@@ -1,19 +1,15 @@
 <div class="min-h-screen flex surface-ground">
   <div
     id="app-sidebar-2"
-    class="bg-bluegray-800 h-screen hidden lg:block flex-shrink-0 fixed lg:sticky left-0 top-0 z-1 select-none"
-    style="width: 280px"
+    class="h-screen hidden lg:block flex-shrink-0 fixed lg:sticky left-0 top-0 z-1 select-none"
+    style="width: 280px; background-color: #757575"
   >
     <div class="flex flex-column h-full">
       <div
-        class="flex align-items-center px-5 bg-bluegray-900 flex-shrink-0"
-        style="height: 60px"
+        class="flex align-items-center px-5 flex-shrink-0"
+        style="height: 60px; background-color: #ededed"
       >
-        <img
-          src="assets/images/blocks/logos/hyper-300.svg"
-          alt="Image"
-          height="30"
-        />
+        <img src="assets/logo/logo-one.png" alt="Image" height="30" />
       </div>
 
       <div class="overflow-y-auto mt-3">
@@ -232,11 +228,15 @@
           leaveActiveClass="slideup"
         >
           <img
-            src="assets/profile/coche.png"
+            src="assets/profile/perfil-de-usuario.png"
             class="mr-2"
             style="width: 28px; height: 28px"
           />
-          <span class="font-medium">Amy Elsner</span>
+          @if(userLogged){
+          <div class="font-medium">{{ userLogged.name }}</div>
+          } @else{
+          <div class="font-medium">No User</div>
+          }
           <i class="pi pi-chevron-up ml-auto"></i>
         </a>
       </div>
@@ -319,7 +319,11 @@
               style="width: 32px; height: 32px"
             />
             <div class="block lg:hidden">
-              <div class="text-900 font-medium">Josephine Lillard</div>
+              @if(userLogged){
+              <div class="text-900 font-medium">{{ userLogged.name }}</div>
+              } @else{
+              <div class="text-900 font-medium">No User</div>
+              }
               <span class="text-600 font-medium text-sm"
                 >Marketing Specialist</span
               >
@@ -335,9 +339,12 @@
           class="border-2 border-dashed surface-border border-round surface-section flex-auto"
           style="width: 100%; display: flex; flex-direction: column"
         >
+          @if(vidibelComponents){
           <app-barra-menu></app-barra-menu>
+          }
 
           <div class="flex flex-auto" style="width: 100%; display: flex">
+            @if(vidibelComponents){
             <div style="width: 25%; padding: 1rem">
               <app-informacion-persona
                 class="flex-auto"
@@ -347,6 +354,12 @@
             <div style="width: 75%; padding-top: 1rem; margin-right: 1rem">
               <router-outlet></router-outlet>
             </div>
+
+            } @else{
+            <div style="width: 100%; padding-top: 1rem; margin-right: 1rem">
+              <router-outlet></router-outlet>
+            </div>
+            }
           </div>
         </div>
       </div>
