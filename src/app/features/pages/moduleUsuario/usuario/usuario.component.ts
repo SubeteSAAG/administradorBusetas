@@ -527,6 +527,7 @@ export default class UsuarioComponent {
   private editar() {
 
 
+    console.log("editar")
 
 
   }

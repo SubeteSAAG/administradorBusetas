@@ -42,15 +42,15 @@ export class BarraMenuComponent {
     this.items = [
       {
           label: 'Guardar',
-          icon: 'assets/logo/Buseta.png'
+          icon: 'assets/icons/guardar.png'
       },
       {
           label: 'Editar',
-          icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg'
+          icon: 'assets/icons/editar.png'
       },
       {
           label: 'Buscar',
-          icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg'
+          icon: 'assets/icons/buscar.png'
       }
     ];
   }
