@@ -52,6 +52,14 @@ export default class DashboardComponent implements OnInit {
     {
       id_menu: 2,
       path: 'gestion-usuario'
+    },
+    {
+      id_menu: 1,
+      path: 'gestion-recorrido'
+    },
+    {
+      id_menu: 2,
+      path: 'gestion-estudiante'
     }
   ]
 
@@ -171,7 +179,17 @@ export default class DashboardComponent implements OnInit {
           path: '/dashboard/estudiante',
           isOpen: false,
           submenus: []
-        }
+        },
+        {
+          id_menu: 1,
+          nombre: 'Gestón Estudiante',
+          icono: 'pi pi-user',
+          estado: true,
+          path: '/dashboard/gestion-estudiante',
+          isOpen: false,
+          submenus: []
+        },
+
     
       ]
     },
@@ -233,12 +251,12 @@ export default class DashboardComponent implements OnInit {
       path: '',
       isOpen: false,
       submenus: [
-        {
+         {
           id_menu: 1,
-          nombre: 'Mantenimiento',
-          icono: 'pi pi-comments',
+          nombre: 'Gestión Recorridos',
+          icono: 'pi pi-map-marker',
           estado: true,
-          path: '/dashboard/recorrido',
+          path: '/dashboard/gestion-recorrido',
           isOpen: false,
           submenus: []
         },
@@ -248,7 +266,7 @@ export default class DashboardComponent implements OnInit {
 
   ];
 
-
+  
 
   constructor(
     private serviceLogin: LoginService,

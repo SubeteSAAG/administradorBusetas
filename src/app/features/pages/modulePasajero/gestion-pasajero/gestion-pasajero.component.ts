@@ -11,9 +11,10 @@ import { BarraMenuService } from '@services/barra-menu-service';
 import { RutaService } from '@services/ruta-service';
 import { TokenService } from '@services/token-service';
 import { Usuario } from '@models/response-login';
-import { RutaModel } from '@models/ruta';
+import { RutaBusetaModel, RutaModel } from '@models/ruta';
 import { ApiResponse } from '@models/api-response';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmationService } from 'primeng/api';
 
 
 @Component({
@@ -35,6 +36,8 @@ export default class GestionPasajeroComponent implements OnInit{
   private readonly serviceBarraMenu = inject(BarraMenuService)
   private readonly serviceRuta = inject(RutaService)
   private readonly serviceToken = inject(TokenService)
+  private readonly serviceConfirmation = inject(ConfirmationService)
+
 
 
   ltsPasajeros = this.servicePasajero.ltsPasajeros
@@ -44,7 +47,7 @@ export default class GestionPasajeroComponent implements OnInit{
   sidebarVisible = false
   message!: MessageModel
   userLogged: Usuario | null = null;
-  selectRuta!: RutaModel
+  selectRuta!: RutaBusetaModel
   pasajeroId: number = 0
 
 
@@ -88,7 +91,6 @@ export default class GestionPasajeroComponent implements OnInit{
       const response = this.ltsPasajeros()
       if (response && response.data != null) {
         if(response.statusCode === 200){
-          console.log("verifica")
           this.serviceLoading.hide()
         }
         if(response.statusCode != 200){
@@ -114,6 +116,9 @@ export default class GestionPasajeroComponent implements OnInit{
 
     if(this.selectRuta){
 
+      console.log('select ruta-->>>>>>')
+      console.log(this.selectRuta)
+
       this.serviceLoading.show()
       const asignar: AsignarPasajeroRutaModel = {
         pasajeroId: this.pasajeroId,
@@ -131,6 +136,7 @@ export default class GestionPasajeroComponent implements OnInit{
             this.message.colorTitle= "green"
             this.message.visible = true
             this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.servicePasajero.getLtsPasajeros()
             this.sidebarVisible = false
           }else{
             this.serviceLoading.hide()
@@ -186,17 +192,33 @@ export default class GestionPasajeroComponent implements OnInit{
 
   }
 
-  getRutaSelected(rutaSelect: RutaModel){
+  getRutaSelected(rutaSelect: RutaBusetaModel){
 
     this.selectRuta = rutaSelect
     const response = this.ltsRutaByEmpresa();
     if (response && response.data) {
-      response.data.forEach((ruta: RutaModel) => {
+      response.data.forEach((ruta: RutaBusetaModel) => {
         ruta.selected = ruta === rutaSelect;
       });
     }
+  }
 
+  removeRutaPasajero(event: Event, pasajero: PasajeroModel){
 
+    this.serviceConfirmation.confirm({
+      target: event.target as EventTarget,
+      message: 'Esta seguro de Quitar de la Ruta al Pasajero '+pasajero.informacionPersonal.nombres + ' ' +pasajero.informacionPersonal.apellidos + '?',
+      header: 'Confirmación',
+      icon: 'pi pi-check',
+      acceptIcon:"none",
+      rejectIcon:"none",
+      rejectButtonStyleClass:"p-button-text",
+      accept: () => {
+
+      },
+      reject: () => {
+      }
+    });
 
   }
 

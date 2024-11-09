@@ -65,6 +65,16 @@ export const routes: Routes = [
                 loadComponent: () => import('@features/pages/moduleUsuario/gestion-usuarios/gestion-usuarios.component')
             },
             {
+                path: 'gestion-recorrido',
+                title: 'Gestión de Recorridos',
+                loadComponent: () => import('@features/pages/moduleRecorrido/gestion-recorrido/gestion-recorrido.component')
+            },
+            {
+                path: 'gestion-estudiante',
+                title: 'Gestión de Estudiantes',
+                loadComponent: () => import('@features/pages/moduleEstudiante/gestion-estudiante/gestion-estudiante.component')
+            },
+            {
                 path: '',
                 redirectTo: '/dashboard/usuario',
                 pathMatch: 'full'

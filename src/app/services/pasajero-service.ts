@@ -25,7 +25,7 @@ export class PasajeroService{
 
     }
 
-    public savePasajero(pasajero: PasajeroModel): Observable<ApiResponse> {
+    public savePasajero(pasajero: PasajeroEditModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Crear`, pasajero);
     }
 

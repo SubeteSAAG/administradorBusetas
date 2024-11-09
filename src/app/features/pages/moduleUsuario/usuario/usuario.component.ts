@@ -17,6 +17,7 @@ import { MessageModel } from '@models/message';
 import { SearchService } from '@services/search-service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalBusquedaComponent} from '@shared/modal-busqueda/modal-busqueda.component'
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 
@@ -461,9 +462,9 @@ export default class UsuarioComponent {
             this.clearComponent()
             this.serviceLoading.hide()
           },
-          error: (error) =>{
+          error: (error: HttpErrorResponse) =>{
             this.serviceLoading.hide()
-            this.message.description = ""+error.message
+            this.message.description = ""+error.error.message
             this.message.icon = "pi pi-times"
             this.message.title = "CREACIÓN DE USUARIOS"
             this.message.colorIcon = "red"
@@ -504,9 +505,9 @@ export default class UsuarioComponent {
             this.serviceLoading.hide()
 
           },
-          error: (error) =>{
+          error: (error: HttpErrorResponse) =>{
             this.serviceLoading.hide()
-            this.message.description = ""+error.message
+            this.message.description = ""+error.error.message
             this.message.icon = "pi pi-times"
             this.message.title = "CREACIÓN DE USUARIOS"
             this.message.colorIcon = "red"

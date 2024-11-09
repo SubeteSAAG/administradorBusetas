@@ -1,4 +1,5 @@
 export interface ConductorModel{
+    id?: number;
     id_conductor: number;
     cedula: string;
     nombre: string;

@@ -63,10 +63,11 @@
                   <th style="width: 15%; text-align: center">Placa</th>
                   <th style="width: 20%; text-align: center">Tipo Vehiculo</th>
                   <th style="width: 20%; text-align: center">Marca</th>
+                  <th style="width: 10%; text-align: center">Ver Conductor</th>
                   <th style="width: 10%; text-align: center">Agregar a Ruta</th>
-                  <th style="width: 10%; text-align: center">
+                  <!--<th style="width: 10%; text-align: center">
                     Agregar a Empresa
-                  </th>
+                  </th>-->
                   <th style="width: 10%; text-align: center">Ver Rutas</th>
                 </tr>
               </ng-template>
@@ -77,11 +78,11 @@
                   <td style="text-align: center">{{ buseta.name }}</td>
                   <td style="text-align: center">
                     <p-button
-                      icon="pi pi-window-maximize"
+                      icon="pi pi-user"
                       [rounded]="true"
                       [text]="true"
                       [raised]="true"
-                      (onClick)="openModal(buseta)"
+                      (onClick)="openModalVerConductor(buseta)"
                     />
                   </td>
                   <td style="text-align: center">
@@ -90,9 +91,18 @@
                       [rounded]="true"
                       [text]="true"
                       [raised]="true"
-                      (onClick)="openModalEmpresa(buseta)"
+                      (onClick)="openModal(buseta)"
                     />
                   </td>
+                  <!--<td style="text-align: center">
+                    <p-button
+                      icon="pi pi-window-maximize"
+                      [rounded]="true"
+                      [text]="true"
+                      [raised]="true"
+                      (onClick)="openModalEmpresa(buseta)"
+                    />
+                  </td>-->
                   <td>
                     <p-button
                       [rounded]="true"
@@ -343,9 +353,11 @@
         </ng-template>
         <ng-template pTemplate="body" let-ruta>
           <tr>
-            <td style="text-align: center">{{ ruta.name }}</td>
-            <td style="text-align: center">{{ ruta.description }}</td>
-            <td style="text-align: center">{{ getHorario(ruta.horario) }}</td>
+            <td style="text-align: center">{{ ruta.ruta.name }}</td>
+            <td style="text-align: center">{{ ruta.ruta.description }}</td>
+            <td style="text-align: center">
+              {{ getHorario(ruta.ruta.horario) }}
+            </td>
             <td style="text-align: center">
               <p-checkbox
                 [binary]="true"
@@ -445,3 +457,72 @@
     }
   </div>
 </p-sidebar>
+
+@if(searchConductor){
+
+<p-dialog
+  header="{{ searchConductor.informacionPersonal.nombres }} {{
+    searchConductor.informacionPersonal.apellidos
+  }}"
+  [modal]="true"
+  [(visible)]="isVisibleConductor"
+  [style]="{ width: '35rem' }"
+>
+  <span class="p-text-secondary block mb-5">Información Personal</span>
+
+  <div class="flex align-items-center gap-3 mb-3">
+    <label class="font-semibold w-6rem">Nombre</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.informacionPersonal.nombres
+    }}</label>
+  </div>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label class="font-semibold w-6rem">Apellido</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.informacionPersonal.apellidos
+    }}</label>
+  </div>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label class="font-semibold w-6rem">Identificación</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.informacionPersonal.identificacion
+    }}</label>
+  </div>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label class="font-semibold w-6rem">Celular</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.informacionPersonal.celular
+    }}</label>
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+    <label class="font-semibold w-6rem">Dirección</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.informacionPersonal.direccion
+    }}</label>
+  </div>
+
+  <span class="p-text-secondary block mb-5">Usuario Conductor</span>
+
+  <div class="flex align-items-center gap-3 mb-3">
+    <label class="font-semibold w-6rem">Usuario</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.usuario.userName
+    }}</label>
+  </div>
+  <div class="flex align-items-center gap-3 mb-3">
+    <label class="font-semibold w-6rem">Email</label>
+    <label class="font-semibold w-9rem">{{
+      searchConductor.usuario.email
+    }}</label>
+  </div>
+
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      label="Aceptar"
+      severity="primary"
+      (onClick)="isVisibleConductor = false"
+    />
+  </div>
+</p-dialog>
+
+}

@@ -16,6 +16,9 @@ import { EmpresaService } from '@services/empresa-service';
 import { EmpresaModel } from '@models/empresa';
 import { TokenService } from '@services/token-service';
 import { Usuario } from '@models/response-login';
+import { faL } from '@fortawesome/free-solid-svg-icons';
+import { UsuarioService } from '@services/usuario-service';
+import { ConductorModel } from '@models/conductor';
 
 
 @Component({
@@ -39,6 +42,7 @@ export default class AsignacionesComponent implements OnInit{
   private readonly serviceBarraMenu = inject(BarraMenuService)
   private readonly serviceEmpresa = inject(EmpresaService)
   private readonly serviceToken = inject(TokenService)
+  private readonly serviceUsuario = inject(UsuarioService)
 
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
@@ -46,6 +50,7 @@ export default class AsignacionesComponent implements OnInit{
   ltsRutasByBuseta = this.serviceRuta.ltsRutasByBuseta
   ltsPasajerosByRutaBuseta = this.serviceRuta.ltsPasajerosByRutaBuseta
   ltsEmpresas = this.serviceEmpresa.ltsEmpresas
+  ltsUsuariosConducotres = this.serviceUsuario.ltsUsuariosConducotres
 
   selectRuta!: RutaModel
   selectEmpresa!: EmpresaModel
@@ -57,7 +62,8 @@ export default class AsignacionesComponent implements OnInit{
   empresaId: number = 0
   sidebarVisibleEmpresa: boolean = false
   userLogged: Usuario | null = null;
-
+  isVisibleConductor = false
+  searchConductor: any = null
 
 
   @ViewChild('stepperPanel') stepperPanel: any;
@@ -73,6 +79,7 @@ export default class AsignacionesComponent implements OnInit{
     this.serviceBuseta.getLtsBusetas()
     this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
     this.serviceEmpresa.getLtsEmpresas()
+    this.serviceUsuario.getLtsUsuariosConducotres()
 
     this.serviceLoading.loading$.subscribe((isLoading) => {
       this.enableLoading = isLoading;
@@ -257,6 +264,22 @@ export default class AsignacionesComponent implements OnInit{
     this.sidebarVisibleEmpresa = true
   }
 
+  openModalVerConductor(buseta: BusetaModel){
+    this.isVisibleConductor = true
+    this.searchConductor = null
+    const conductor = this.ltsUsuariosConducotres();
+    if (conductor && conductor.data && conductor.data.length > 0) {
+      this.searchConductor = conductor.data.find(
+        (conductor: ConductorModel) =>
+          conductor.id &&
+          conductor.id.toString().toUpperCase() === buseta.conductorId?.toString().toUpperCase()
+      );
+    }
+    console.log('encontradp')
+    console.log(this.searchConductor)
+    
+  }
+
   handleNextClick(nextCallback: EventEmitter<any>, buseta: BusetaModel) {
     console.log('Next button clicked');
     console.log(buseta.id)
@@ -267,7 +290,7 @@ export default class AsignacionesComponent implements OnInit{
 
   handleNextClick2(nextCallback: EventEmitter<any>, ruta: any) {
     console.log('Next button clicked');
-    this.serviceRuta.getLtsPasajerosByRutaBuseta(ruta.ruta.id)
+    this.serviceRuta.getLtsPasajerosByRutaBuseta(ruta.id)
     
     nextCallback.emit();
   }
