@@ -54,7 +54,7 @@ export default class RutaComponent implements OnInit{
   routeForm!: FormGroup
   horarioForm!: FormGroup
   idRoute: number = 0
-  ltsRouteByEnterprise = this.serviceRuta.ltsRutaByEmpresa
+  ltsRutaByBuseta = this.serviceRuta.ltsRutaByBuseta
   listSearchRouteEnterprise: RutaModel[] = []
   listHorarios: hoarioModel[] = []
   message!: MessageModel
@@ -115,13 +115,13 @@ export default class RutaComponent implements OnInit{
       this.buscar();
     });    
 
-    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+    this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
 
     this.searchSubscription = this.serviceSearch.getSearchValueObservable().subscribe((value: any) => {
       console.log("llegagaga busqueueu")
       console.log(value)
 
-      const ruta = this.ltsRouteByEnterprise();
+      const ruta = this.ltsRutaByBuseta();
       console.log("rutas")
       console.log(ruta.data)
       if (ruta && ruta.data && ruta.data.length > 0) {
@@ -306,7 +306,7 @@ export default class RutaComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
 
           }else{
 
@@ -379,7 +379,7 @@ export default class RutaComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
             this.serviceEntity.setEntity(response.data)
           }else{
 
@@ -440,7 +440,7 @@ export default class RutaComponent implements OnInit{
       console.log(result)
       if (result) {
         let resultFound = false
-        const response = this.ltsRouteByEnterprise()
+        const response = this.ltsRutaByBuseta()
         if (response && response.data) {
           response.data.forEach((ruta: RutaModel) => {
             if(ruta.name.toUpperCase()  == result.toUpperCase()){

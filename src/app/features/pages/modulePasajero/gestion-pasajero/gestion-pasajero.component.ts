@@ -41,7 +41,7 @@ export default class GestionPasajeroComponent implements OnInit{
 
 
   ltsPasajeros = this.servicePasajero.ltsPasajeros
-  ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
+  ltsRutaByBuseta = this.serviceRuta.ltsRutaByBuseta
 
   enableLoading = false
   sidebarVisible = false
@@ -60,7 +60,7 @@ export default class GestionPasajeroComponent implements OnInit{
     this.serviceBarraMenu.onPanelInformativo()
     this.userLogged = this.serviceToken.getDetailUser()
     this.servicePasajero.getLtsPasajeros()
-    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+    this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
     this.serviceLoading.loading$.subscribe((isLoading) => {
       this.enableLoading = isLoading;
     });
@@ -108,7 +108,7 @@ export default class GestionPasajeroComponent implements OnInit{
   }
 
   recargarRutas(){
-    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+    this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
 
   }
 
@@ -135,7 +135,7 @@ export default class GestionPasajeroComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
             this.servicePasajero.getLtsPasajeros()
             this.sidebarVisible = false
           }else{
@@ -195,7 +195,7 @@ export default class GestionPasajeroComponent implements OnInit{
   getRutaSelected(rutaSelect: RutaBusetaModel){
 
     this.selectRuta = rutaSelect
-    const response = this.ltsRutaByEmpresa();
+    const response = this.ltsRutaByBuseta();
     if (response && response.data) {
       response.data.forEach((ruta: RutaBusetaModel) => {
         ruta.selected = ruta === rutaSelect;

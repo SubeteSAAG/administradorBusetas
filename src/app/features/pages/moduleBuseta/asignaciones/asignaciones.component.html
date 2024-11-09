@@ -303,11 +303,11 @@
   <div class="container-sidebar">
     <h3>SELECCIÓN DE RUTAS</h3>
 
-    @if(ltsRutaByEmpresa()){
+    @if(ltsRutasEmpresa()){
     <div class="card-table">
       <p-table
         #dt2
-        [value]="ltsRutaByEmpresa().data"
+        [value]="ltsRutasEmpresa().data"
         [tableStyle]="{ 'min-width': '40rem' }"
         responsiveLayout="stack"
         [paginator]="true"
@@ -353,10 +353,10 @@
         </ng-template>
         <ng-template pTemplate="body" let-ruta>
           <tr>
-            <td style="text-align: center">{{ ruta.ruta.name }}</td>
-            <td style="text-align: center">{{ ruta.ruta.description }}</td>
+            <td style="text-align: center">{{ ruta.name }}</td>
+            <td style="text-align: center">{{ ruta.description }}</td>
             <td style="text-align: center">
-              {{ getHorario(ruta.ruta.horario) }}
+              {{ getHorario(ruta.horario) }}
             </td>
             <td style="text-align: center">
               <p-checkbox
