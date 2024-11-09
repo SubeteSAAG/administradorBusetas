@@ -14,17 +14,26 @@ export class RutaService{
     private readonly endpoint = "/Rutas"
     private readonly apiUrl = environment.API_URL
 
-    public ltsRutaByEmpresa = signal<ApiResponse | any>(null)
+    public ltsRutaByBuseta = signal<ApiResponse | any>(null)
     public ltsRutasByBuseta = signal<ApiResponse | any>(null)
+    public ltsRutasEmpresa = signal<ApiResponse | any>(null)
     public ltsPasajerosByRutaBuseta = signal<ApiResponse | any>(null)
 
 
-    public getLtsRutaByEmpresa(empresaId: number){
+    public getLtsRutaBuseta(empresaId: number){
         this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/ListarRutaBuseta/${empresaId}`)
-        .pipe(tap((response: ApiResponse) => this.ltsRutaByEmpresa.set(response)))
+        .pipe(tap((response: ApiResponse) => this.ltsRutaByBuseta.set(response)))
         .subscribe()
 
     }
+
+    public getLtsRutaEmpresa(empresaId: number){
+        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/Listar/${empresaId}`)
+        .pipe(tap((response: ApiResponse) => this.ltsRutasEmpresa.set(response)))
+        .subscribe()
+
+    }
+
 
     public saveRoute(pasajero: RutaModel): Observable<ApiResponse> {
         return this.http.post<ApiResponse>(`${this.apiUrl}${this.endpoint}/Crear`, pasajero);

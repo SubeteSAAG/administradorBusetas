@@ -46,7 +46,7 @@ export default class AsignacionesComponent implements OnInit{
 
 
   ltsBusetas = this.serviceBuseta.ltsBusetas
-  ltsRutaByEmpresa = this.serviceRuta.ltsRutaByEmpresa
+  ltsRutasEmpresa = this.serviceRuta.ltsRutasEmpresa
   ltsRutasByBuseta = this.serviceRuta.ltsRutasByBuseta
   ltsPasajerosByRutaBuseta = this.serviceRuta.ltsPasajerosByRutaBuseta
   ltsEmpresas = this.serviceEmpresa.ltsEmpresas
@@ -77,7 +77,7 @@ export default class AsignacionesComponent implements OnInit{
     this.userLogged = this.serviceToken.getDetailUser()
     this.serviceBarraMenu.onPanelInformativo()
     this.serviceBuseta.getLtsBusetas()
-    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+    this.serviceRuta.getLtsRutaEmpresa(this.userLogged?.empresaId ?? 0)
     this.serviceEmpresa.getLtsEmpresas()
     this.serviceUsuario.getLtsUsuariosConducotres()
 
@@ -128,7 +128,7 @@ export default class AsignacionesComponent implements OnInit{
   }
 
   recargarRutas(){
-    this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+    this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
   }
 
   recargarEmpresa(){
@@ -139,7 +139,7 @@ export default class AsignacionesComponent implements OnInit{
 
     this.selectRuta = rutaOption
     this.rutaId = rutaOption.id ?? 0
-    const response = this.ltsRutaByEmpresa();
+    const response = this.ltsRutasEmpresa();
     if (response && response.data) {
       response.data.forEach((ruta: RutaModel) => {
         ruta.selected = ruta === rutaOption;
@@ -199,7 +199,7 @@ export default class AsignacionesComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
             this.sidebarVisible = false
           }else{
             this.serviceLoading.hide()
@@ -275,8 +275,6 @@ export default class AsignacionesComponent implements OnInit{
           conductor.id.toString().toUpperCase() === buseta.conductorId?.toString().toUpperCase()
       );
     }
-    console.log('encontradp')
-    console.log(this.searchConductor)
     
   }
 
@@ -315,7 +313,7 @@ export default class AsignacionesComponent implements OnInit{
             this.message.colorIcon = "green"
             this.message.colorTitle= "green"
             this.message.visible = true
-            this.serviceRuta.getLtsRutaByEmpresa(this.userLogged?.empresaId ?? 0)
+            this.serviceRuta.getLtsRutaBuseta(this.userLogged?.empresaId ?? 0)
             this.sidebarVisible = false
           }else{
             this.serviceLoading.hide()
