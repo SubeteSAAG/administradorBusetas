@@ -217,8 +217,9 @@ export default class PasajeroComponent implements OnInit {
         direccion: formValues.direccion
       }
 
-      const pasajero: PasajeroModel = {
-        informacionPersonal: informacion,
+      const pasajero: PasajeroEditModel = {
+        id: 0,
+        infoPersonal: informacion,
       } 
 
       this.servicePasajero.savePasajero(pasajero).subscribe({

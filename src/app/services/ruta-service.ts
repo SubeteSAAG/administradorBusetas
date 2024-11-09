@@ -20,7 +20,7 @@ export class RutaService{
 
 
     public getLtsRutaByEmpresa(empresaId: number){
-        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/listar/${empresaId}`)
+        this.http.get<ApiResponse>(`${this.apiUrl}${this.endpoint}/ListarRutaBuseta/${empresaId}`)
         .pipe(tap((response: ApiResponse) => this.ltsRutaByEmpresa.set(response)))
         .subscribe()
 

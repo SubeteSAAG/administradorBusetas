@@ -10,6 +10,7 @@ import { MessageModel } from '@models/message';
 import { UsuarioModel } from '@models/usuario';
 import { ConfirmationService } from 'primeng/api';
 import { ApiResponse } from '@models/api-response';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -145,9 +146,23 @@ export default class GestionUsuariosComponent implements OnInit{
             complete: () =>{
               this.serviceLoading.hide()
             },
-            error: (error) =>{
-              this.serviceLoading.hide()
-              this.message.description = ""+error.message
+            error: (error: HttpErrorResponse) =>{
+
+              this.serviceLoading.hide();
+              let apiResponse: ApiResponse;
+              try {
+                apiResponse = error.error as ApiResponse; 
+              } catch (e) {
+                apiResponse = {
+                  success: false,
+                  statusCode: error.status,
+                  data: null,
+                  message: error.message,
+                  error: error.statusText
+                };
+              }
+          
+              this.message.description = apiResponse.message
               this.message.icon = "pi pi-times"
               this.message.title = "ACTIVACIÓN DE USUARIOS"
               this.message.colorIcon = "red"
@@ -202,9 +217,23 @@ export default class GestionUsuariosComponent implements OnInit{
             complete: () =>{
               this.serviceLoading.hide()
             },
-            error: (error) =>{
-              this.serviceLoading.hide()
-              this.message.description = ""+error.message
+            error: (error: HttpErrorResponse) =>{
+             
+              this.serviceLoading.hide();
+              let apiResponse: ApiResponse;
+              try {
+                apiResponse = error.error as ApiResponse; 
+              } catch (e) {
+                apiResponse = {
+                  success: false,
+                  statusCode: error.status,
+                  data: null,
+                  message: error.message,
+                  error: error.statusText
+                };
+              }
+
+              this.message.description = apiResponse.message
               this.message.icon = "pi pi-times"
               this.message.title = "DESACTIVACIÓN DE USUARIOS"
               this.message.colorIcon = "red"

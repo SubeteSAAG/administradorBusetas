@@ -12,6 +12,8 @@
   (closed)="handleMessageClosed()"
 ></app-message>
 
+<p-confirmDialog />
+
 <h4 style="padding: 5px; margin-left: 2rem">GESTIÓN DE PASAJEROS</h4>
 
 @if(ltsPasajeros()){
@@ -40,12 +42,13 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 20%; text-align: center">Identificación</th>
-        <th style="width: 25%; text-align: center">Nombres</th>
-        <th style="width: 25%; text-align: center">Apellidos</th>
-        <th style="width: 20%; text-align: center">Telefono</th>
-        <th style="width: 20%; text-align: center">Celular</th>
-        <th style="width: 25%; text-align: center">Dirección</th>
+        <th style="width: 15%; text-align: center">Identificación</th>
+        <th style="width: 10%; text-align: center">Tipo</th>
+        <th style="width: 20%; text-align: center">Nombres</th>
+        <th style="width: 20%; text-align: center">Apellidos</th>
+        <th style="width: 10%; text-align: center">Telefono</th>
+        <th style="width: 10%; text-align: center">Celular</th>
+        <th style="width: 20%; text-align: center">Dirección</th>
         <th style="width: 30%; text-align: center">Asignar Ruta-Buseta</th>
       </tr>
     </ng-template>
@@ -53,6 +56,13 @@
       <tr>
         <td style="text-align: center">
           {{ pasajero.informacionPersonal.identificacion }}
+        </td>
+        <td style="text-align: center">
+          @if(pasajero.esEstudiante){
+          <p-tag severity="success" value="ESTUDIANTE" [rounded]="true" />
+          } @else{
+          <p-tag severity="danger" value="PASAJERO" [rounded]="true" />
+          }
         </td>
         <td style="text-align: center">
           {{ pasajero.informacionPersonal.nombres }}
@@ -70,6 +80,16 @@
           {{ pasajero.informacionPersonal.direccion }}
         </td>
         <td style="text-align: center">
+          @if(pasajero.rutaId){
+
+          <p-button
+            (onClick)="removeRutaPasajero($event, pasajero)"
+            label="Quitar"
+            severity="danger"
+            [outlined]="true"
+          />
+
+          }@else{
           <p-button
             [rounded]="true"
             [text]="true"
@@ -77,6 +97,7 @@
             icon="pi pi-arrow-right"
             (onClick)="openModal(pasajero)"
           />
+          }
         </td>
       </tr>
     </ng-template>
@@ -148,8 +169,8 @@
         </ng-template>
         <ng-template pTemplate="body" let-ruta>
           <tr>
-            <td style="text-align: center">{{ ruta.name }}</td>
-            <td style="text-align: center">{{ ruta.description }}</td>
+            <td style="text-align: center">{{ ruta.ruta.name }}</td>
+            <td style="text-align: center">{{ ruta.ruta.description }}</td>
             <td style="text-align: center">
               <p-checkbox
                 [binary]="true"

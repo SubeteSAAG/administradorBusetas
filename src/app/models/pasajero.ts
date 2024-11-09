@@ -6,6 +6,7 @@ export interface PasajeroModel{
     empresaId?: number,
     updatedOn?: string,
     informacionPersonal: InformacionPersonalModel,
+    infoPersonal?: InformacionPersonalModel
     ubicacionDomicilio?: string,
     abordo?: string,
     esEstudiante?: string
@@ -36,6 +37,7 @@ export interface PasajeroListaModel{
     ubicacionDomicilio: string,
     abordo: string,
     esEstudiante: boolean
+    rutaId?: number
 }
 
 export interface AsignarPasajeroRutaModel {

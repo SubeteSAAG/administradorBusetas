@@ -1,0 +1,79 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+></app-message>
+
+<h4 style="padding: 5px; margin-left: 2rem">GESTIÓN DE ESTUDIANTES</h4>
+
+@if(ltsEstudiantes()){
+<div class="card-table">
+  <p-table
+    #dt1
+    [value]="ltsEstudiantes().data"
+    [tableStyle]="{ 'min-width': '65rem' }"
+    responsiveLayout="stack"
+    [paginator]="true"
+    [rows]="5"
+    [globalFilterFields]="[
+      'informacionPersonal.nombres',
+      'informacionPersonal.apellidos',
+      'informacionPersonal.identificacion'
+    ]"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="BUSCAR ESTUDIANTE"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 15%; text-align: center">Identificación</th>
+        <th style="width: 20%; text-align: center">Nombres</th>
+        <th style="width: 20%; text-align: center">Apellidos</th>
+        <th style="width: 10%; text-align: center">Telefono</th>
+        <th style="width: 10%; text-align: center">Celular</th>
+        <th style="width: 20%; text-align: center">Dirección</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-estudiante>
+      <tr>
+        <td style="text-align: center">
+          {{ estudiante.informacionPersonal.identificacion }}
+        </td>
+        <td style="text-align: center">
+          {{ estudiante.informacionPersonal.nombres }}
+        </td>
+        <td style="text-align: center">
+          {{ estudiante.informacionPersonal.apellidos }}
+        </td>
+        <td style="text-align: center">
+          {{ estudiante.informacionPersonal.telefono }}
+        </td>
+        <td style="text-align: center">
+          {{ estudiante.informacionPersonal.celular }}
+        </td>
+        <td style="text-align: center">
+          {{ estudiante.informacionPersonal.direccion }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+}
