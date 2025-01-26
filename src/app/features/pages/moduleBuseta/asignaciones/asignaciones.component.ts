@@ -78,7 +78,7 @@ export default class AsignacionesComponent implements OnInit{
     this.serviceBarraMenu.onPanelInformativo()
     this.serviceBuseta.getLtsBusetas()
     this.serviceRuta.getLtsRutaEmpresa(this.userLogged?.empresaId ?? 0)
-    this.serviceEmpresa.getLtsEmpresas()
+    //this.serviceEmpresa.getLtsEmpresas()
     this.serviceUsuario.getLtsUsuariosConducotres()
 
     this.serviceLoading.loading$.subscribe((isLoading) => {
@@ -132,7 +132,7 @@ export default class AsignacionesComponent implements OnInit{
   }
 
   recargarEmpresa(){
-    this.serviceEmpresa.getLtsEmpresas()
+    //this.serviceEmpresa.getLtsEmpresas()
   }
 
   getRutaSelected(rutaOption: RutaModel){

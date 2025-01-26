@@ -60,6 +60,14 @@ export default class DashboardComponent implements OnInit {
     {
       id_menu: 2,
       path: 'gestion-estudiante'
+    },
+    {
+      id_menu: 2,
+      path: 'gestion-empresa'
+    },
+    {
+      id_menu: 2,
+      path: 'tiemporeal-ruta'
     }
   ]
 
@@ -81,6 +89,16 @@ export default class DashboardComponent implements OnInit {
           path: '/dashboard/empresa',
           isOpen: false,
           submenus: []
+        },
+        {
+          id_menu: 2,
+          nombre: 'Gestión de Empresas',
+          icono: 'pi pi-warehouse',
+          estado: true,
+          path: '/dashboard/gestion-empresa',
+          isOpen: false,
+          submenus: []
+
         }
       ]
     },
@@ -237,6 +255,15 @@ export default class DashboardComponent implements OnInit {
           icono: 'pi pi-comments',
           estado: true,
           path: '/dashboard/ruta',
+          isOpen: false,
+          submenus: []
+        },
+        {
+          id_menu: 2,
+          nombre: 'Inspección de Rutas',
+          icono: 'pi pi-car',
+          estado: true,
+          path: '/dashboard/tiemporeal-ruta',
           isOpen: false,
           submenus: []
         },

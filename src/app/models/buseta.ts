@@ -3,7 +3,7 @@ export interface BusetaModel{
     id?: number;
     name: string;
     description: string;
-    propietario: string;
+    propietario?: string;
     capacidad: number;
     conductorId?: number;
     createdOn?: string,

@@ -75,6 +75,16 @@ export const routes: Routes = [
                 loadComponent: () => import('@features/pages/moduleEstudiante/gestion-estudiante/gestion-estudiante.component')
             },
             {
+                path: 'gestion-empresa',
+                title: 'Gestión de Empresas',
+                loadComponent: () => import('@features/pages/moduleEmpresa/gestion-empresa/gestion-empresa.component')
+            },
+            {
+                path: 'tiemporeal-ruta',
+                title: 'Inspección de Rutas',
+                loadComponent: () => import('@features/pages/moduleRuta/tiemporeal-ruta/tiemporeal-ruta.component')
+            },
+            {
                 path: '',
                 redirectTo: '/dashboard/usuario',
                 pathMatch: 'full'

@@ -82,7 +82,7 @@ export default class BusetaComponent implements OnInit {
         nombre: new FormControl('', [Validators.required]),
         placa: new FormControl('', [Validators.required]),
         descripcion: new FormControl('', [Validators.required]),
-        propietario: null,
+        //propietario: null,
         capacidad: new FormControl('', [Validators.required]),
       }
     )
@@ -261,7 +261,7 @@ export default class BusetaComponent implements OnInit {
       const buseta: BusetaModel = {
         capacidad: formValues.capacidad,
         description: formValues.descripcion,
-        propietario: formValues.propietario,
+        propietario: '',
         name: formValues.nombre,
         placa: formValues.placa,
         conductorId: this.selectConductor.id
@@ -343,7 +343,7 @@ export default class BusetaComponent implements OnInit {
         id: this.idVehiculo,
         capacidad: formValues.capacidad,
         description: formValues.descripcion,
-        propietario: formValues.propietario,
+        //propietario: formValues.propietario,
         name: formValues.nombre,
         placa: formValues.placa,
   
@@ -442,7 +442,7 @@ export default class BusetaComponent implements OnInit {
               this.busetaForm.patchValue({
                 nombre: buseta.name,
                 descripcion: buseta.description,
-                propietario: "",
+                //propietario: "",
                 capacidad: buseta.capacidad,
                 placa: buseta.placa
               }); 

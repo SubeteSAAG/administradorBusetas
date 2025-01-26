@@ -1,0 +1,64 @@
+@if(enableLoading){
+<app-loading></app-loading>
+}
+
+<app-message
+  [title]="message.title"
+  [colorTitle]="message.colorTitle"
+  [description]="message.description"
+  [icon]="message.icon"
+  [colorIcon]="message.colorIcon"
+  [visible]="message.visible"
+  (closed)="handleMessageClosed()"
+>
+</app-message>
+
+<h4 style="padding: 5px; margin-left: 2rem">GESTIÓN DE EMPRESAS</h4>
+
+@if(ltsEmpresas()){
+<div class="card-table">
+  <p-table
+    #dt1
+    [value]="ltsEmpresas().data"
+    [tableStyle]="{ 'min-width': '65rem' }"
+    responsiveLayout="stack"
+    [paginator]="true"
+    [rows]="5"
+    [globalFilterFields]="['name', 'userName', 'email']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="BUSCAR EMPRESA"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 15%; text-align: center">Nombre</th>
+        <th style="width: 15%; text-align: center">Usuario</th>
+        <th style="width: 10%; text-align: center">Email</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-empresa>
+      <tr>
+        <td style="text-align: center">
+          {{ empresa.name }}
+        </td>
+        <td style="text-align: center">
+          {{ empresa.userName }}
+        </td>
+        <td style="text-align: center">
+          {{ empresa.placa }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+}

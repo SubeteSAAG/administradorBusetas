@@ -22,6 +22,7 @@ export const ErrorApiInterceptor: HttpInterceptorFn = (
         serviceLoading.hide()
       } else if (error.status === 401) {
         console.error('No autorizado', error);
+        serviceLoading.hide()
         serviceToken.removeToken()
       } else if (error.status === 500) {
         console.error('Internal server', error);

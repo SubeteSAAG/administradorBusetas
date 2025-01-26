@@ -66,7 +66,7 @@
         class="custom-input"
         placeholder="Dia"
         min="1"
-        max="31"
+        max="7"
         formControlName="dia"
       />
       @if(horarioForm.get('dia')?.hasError('required') &&
@@ -77,7 +77,7 @@
       <div class="form-error" style="color: red">El valor minimo es 1</div>
       } @if(horarioForm.get('dia')?.hasError('max') &&
       horarioForm.get('dia')?.touched){
-      <div class="form-error" style="color: red">El valor maximo es 31</div>
+      <div class="form-error" style="color: red">El valor maximo es 7</div>
       }
     </div>
     <div class="p-col-12">
